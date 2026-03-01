@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia Prisma de Inteligência Artificial</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-deep: #1a3a2a;
+  --green-mid: #2d5a3f;
+  --green-light: #3d7a5a;
+  --gold: #c9a84c;
+  --gold-light: #e0c97a;
+  --gold-pale: #f0e4c4;
+  --gold-dark: #a08030;
+  --cream: #f5f0e8;
+  --cream-mid: #ede6da;
+  --cream-dark: #e0d8c8;
+  --text-dark: #1a1a18;
+  --text-mid: #4a4a42;
+  --text-light: #7a7a70;
+  --white: #fefdfb;
+  --code-bg: #0d1117;
+  --code-text: #c9d1d9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body { font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.7; font-weight: 300; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; transition: opacity 0.8s ease; background-image: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(160,128,48,0.015) 2px,rgba(160,128,48,0.015) 3px),repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(160,128,48,0.015) 2px,rgba(160,128,48,0.015) 3px),repeating-linear-gradient(0deg,transparent,transparent 8px,rgba(26,58,42,0.012) 8px,rgba(26,58,42,0.012) 9px),repeating-linear-gradient(90deg,transparent,transparent 11px,rgba(26,58,42,0.008) 11px,rgba(26,58,42,0.008) 12px); }
+body > * { position: relative; z-index: 1; }
+
+/* GATE */
+#access-gate { position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--green-deep);transition:opacity 1s ease,transform 1s ease;overflow:hidden; }
+#access-gate::before { content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(201,168,76,0.02) 3px,rgba(201,168,76,0.02) 4px),repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(201,168,76,0.02) 3px,rgba(201,168,76,0.02) 4px); }
+#access-gate::after { content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(201,168,76,0.05) 0%,transparent 50%),radial-gradient(ellipse at 80% 50%,rgba(61,122,90,0.05) 0%,transparent 50%);animation:gateGlow 10s ease-in-out infinite alternate; }
+@keyframes gateGlow { 0%{opacity:.5}100%{opacity:1} }
+#access-gate.hidden { opacity:0;transform:scale(1.02);pointer-events:none; }
+.gate-card { text-align:center;padding:3.5rem 2.5rem;max-width:440px;width:90%;position:relative;z-index:1; }
+.gate-fleur-top { color:var(--gold-dark);font-size:2rem;opacity:.3;margin-bottom:1.5rem;animation:floatFleur 6s ease-in-out infinite; }
+@keyframes floatFleur { 0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)} }
+.gate-logo { font-family:'Cinzel Decorative',serif;font-size:2rem;font-weight:700;color:var(--cream);letter-spacing:.04em; }
+.gate-logo span { color:var(--gold); }
+.gate-divider-wrap { display:flex;align-items:center;justify-content:center;gap:.8rem;margin:1rem 0 1.2rem; }
+.gate-divider-line { width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent); }
+.gate-divider-fleur { color:var(--gold-dark);font-size:.8rem;opacity:.5; }
+.gate-subtitle { font-family:'Outfit',sans-serif;font-size:.78rem;color:var(--gold-light);letter-spacing:.2em;text-transform:uppercase;font-weight:400;margin-bottom:2.5rem; }
+.gate-input { width:100%;padding:1rem 1.2rem;font-family:'Cinzel',serif;font-size:.95rem;font-weight:500;letter-spacing:.1em;text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.25);border-radius:3px;color:var(--cream);outline:none;transition:all .4s ease;margin-bottom:1.2rem; }
+.gate-input:focus { border-color:var(--gold);background:rgba(255,255,255,.08);box-shadow:0 0 30px rgba(201,168,76,.08); }
+.gate-input::placeholder { color:rgba(245,240,232,.25);font-family:'Outfit',sans-serif;font-weight:300;letter-spacing:.08em;font-size:.88rem; }
+.gate-btn { width:100%;padding:.95rem;font-family:'Cinzel',serif;font-size:.82rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--gold-dark));background-size:200% 200%;color:var(--green-deep);border:none;border-radius:3px;cursor:pointer;transition:all .4s ease;position:relative;overflow:hidden; }
+.gate-btn::before { content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .6s ease; }
+.gate-btn:hover::before { left:100%; }
+.gate-btn:hover { background-position:100% 100%;transform:translateY(-1px);box-shadow:0 6px 25px rgba(201,168,76,.25); }
+.gate-error { color:#e07a5f;font-size:.82rem;margin-top:.8rem;opacity:0;transition:opacity .3s ease; }
+.gate-error.show { opacity:1; }
+.gate-footer-ornament { margin-top:2.5rem;display:flex;align-items:center;justify-content:center;gap:1rem;opacity:.2; }
+.gate-footer-line { width:30px;height:1px;background:var(--gold); }
+
+/* VIDEO INTRO */
+#video-intro { position:fixed;inset:0;z-index:9998;background:#000;display:none;align-items:center;justify-content:center;flex-direction:column;cursor:pointer; }
+#video-intro.active { display:flex; }
+#video-intro video { max-width:100%;max-height:80vh;object-fit:contain; }
+.skip-hint { position:absolute;bottom:2rem;font-family:'Outfit',sans-serif;font-size:.75rem;color:rgba(255,255,255,.35);letter-spacing:.15em;text-transform:uppercase;animation:pulseFade 2s ease-in-out infinite; }
+@keyframes pulseFade { 0%,100%{opacity:.35}50%{opacity:.15} }
+
+/* MAIN */
+#main-content { display:none;opacity:0;transition:opacity 1s ease;min-height:100vh; }
+#main-content.visible { display:block;opacity:1; }
+
+/* HERO */
+.hero { background:var(--green-deep);padding:4.5rem 2rem 3.5rem;text-align:center;position:relative;overflow:hidden; }
+.hero::before { content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(201,168,76,.015) 3px,rgba(201,168,76,.015) 4px),repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(201,168,76,.015) 3px,rgba(201,168,76,.015) 4px); }
+.hero::after { content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 40%,rgba(201,168,76,.07) 0%,transparent 55%),radial-gradient(ellipse at 75% 60%,rgba(201,168,76,.04) 0%,transparent 55%);transition:background 0.8s ease; }
+.hero-content { position:relative;z-index:1;max-width:700px;margin:0 auto; }
+.hero-fleur { font-size:2.5rem;color:var(--gold-dark);opacity:.35;margin-bottom:1.2rem;animation:floatFleur 8s ease-in-out infinite; }
+.hero-brand { font-family:'Cinzel',serif;font-size:.85rem;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;font-weight:500;margin-bottom:1rem; }
+.hero h1 { font-family:'Cinzel Decorative',serif;font-size:clamp(1.6rem,4.5vw,2.8rem);font-weight:700;color:var(--cream);line-height:1.3;margin-bottom:1rem; }
+.hero h1 em { font-style:normal;color:var(--gold);display:block;font-size:.85em; }
+.hero-ornament { display:flex;align-items:center;justify-content:center;gap:1rem;margin:1.2rem auto; }
+.hero-orn-line { width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent); }
+.hero-orn-fleur { color:var(--gold-dark);font-size:1rem;opacity:.5; }
+.hero p { font-size:.95rem;color:rgba(245,240,232,.6);max-width:460px;margin:0 auto;font-weight:300;line-height:1.8; }
+
+/* TAB BAR */
+.tab-bar { background:var(--white);border-bottom:1px solid var(--cream-dark);padding:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.04); }
+.tab-bar::after { content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-pale),transparent); }
+.tab-inner { max-width:960px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;align-items:center;justify-content:center; }
+.tab-inner::-webkit-scrollbar { display:none; }
+.tab-btn { padding:.9rem 1.1rem;font-family:'Cinzel',serif;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-light);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .3s ease; }
+.tab-btn:hover { color:var(--green-deep); }
+.tab-btn.active { color:var(--green-deep);border-bottom-color:var(--gold); }
+.tab-fleur { color:var(--gold);font-size:.55rem;opacity:.2;padding:0 .15rem;user-select:none; }
+
+/* MODULE PANELS */
+.module-panel { display:none;animation:fadeModule .5s ease; }
+.module-panel.active { display:block; }
+@keyframes fadeModule { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+
+/* SECTIONS */
+.section { max-width:820px;margin:0 auto;padding:3.5rem 2rem 2rem; }
+.section-header { text-align:center;margin-bottom:2.5rem; }
+.section-label { font-family:'Cinzel',serif;font-size:.7rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:.8rem; }
+.section h2 { font-family:'Cinzel Decorative',serif;font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:700;color:var(--green-deep);line-height:1.3;margin-bottom:.6rem; }
+.section-h2-ornament { display:flex;align-items:center;justify-content:center;gap:.8rem;margin:.6rem 0 1rem; }
+.section-h2-line { width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+.section-h2-fleur { color:var(--gold);font-size:.7rem;opacity:.5; }
+.section-intro { font-size:.95rem;color:var(--text-mid);max-width:560px;margin:0 auto;text-align:center;line-height:1.8; }
+
+/* TOOL CARDS WITH TOGGLE */
+.tool-card { background:var(--white);border:1px solid var(--cream-dark);border-radius:6px;padding:2rem;margin-bottom:1.8rem;transition:all .4s ease;position:relative;overflow:hidden;cursor:pointer; }
+.tool-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s ease; }
+.tool-card:hover { box-shadow:0 10px 40px rgba(0,0,0,.06);transform:translateY(-2px); }
+.tool-card:hover::before { opacity:1; }
+.tool-card .corner-tl,.tool-card .corner-br { position:absolute;font-size:.65rem;color:var(--gold);opacity:.15; }
+.tool-card .corner-tl { top:.7rem;left:.7rem; }
+.tool-card .corner-br { bottom:.7rem;right:.7rem; }
+
+.tool-header { display:flex;align-items:center;gap:1rem;margin-bottom:.8rem; }
+.tool-icon { width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0; }
+.tool-icon.text { background:linear-gradient(135deg,#d4a574,#c9a84c); }
+.tool-icon.image { background:linear-gradient(135deg,#7a9e7e,#3d7a5a); }
+.tool-icon.video { background:linear-gradient(135deg,#8b6cc1,#6a4fa0); }
+.tool-icon.code { background:linear-gradient(135deg,#4a90d9,#2d6bc4); }
+.tool-icon.music { background:linear-gradient(135deg,#e07a5f,#c94040); }
+.tool-name { font-family:'Cinzel Decorative',serif;font-size:1.25rem;font-weight:700;color:var(--green-deep); }
+.tool-tagline { font-size:.8rem;color:var(--text-light);font-weight:300;margin-top:.1rem; }
+.badge { display:inline-block;padding:.18rem .6rem;font-family:'Outfit',sans-serif;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;margin-left:.5rem;vertical-align:middle; }
+.badge.best { background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--green-deep); }
+.badge.paid { background:#fff3e0;color:#e65100; }
+.badge.free { background:#e8f5e9;color:#2e7d32; }
+
+/* TOGGLE SYSTEM */
+.tool-summary { margin-bottom:0; }
+.tool-summary p { color:var(--text-mid);font-size:.92rem;line-height:1.8;margin-bottom:.5rem; }
+.tool-full { max-height:0;overflow:hidden;transition:max-height .6s ease,opacity .4s ease;opacity:0; }
+.tool-card.expanded .tool-full { max-height:5000px;opacity:1; }
+.toggle-hint { display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.6rem 0 0;font-family:'Cinzel',serif;font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dark);opacity:.5;transition:opacity .3s ease; }
+.tool-card:hover .toggle-hint { opacity:.8; }
+.toggle-hint .arrow { transition:transform .3s ease;font-size:.7rem; }
+.tool-card.expanded .toggle-hint .arrow { transform:rotate(180deg); }
+
+/* CONTENT ELEMENTS */
+.tool-body p { color:var(--text-mid);margin-bottom:1rem;font-size:.92rem;line-height:1.8; }
+.tool-body strong { color:var(--text-dark);font-weight:500; }
+.how-to { background:var(--cream);border-radius:4px;padding:1.4rem 1.6rem;margin-top:1.3rem;border:1px solid var(--cream-dark);position:relative; }
+.how-to::before { content:'⚜';position:absolute;top:-.5rem;left:50%;transform:translateX(-50%);font-size:.65rem;color:var(--gold);opacity:.3;background:var(--cream);padding:0 .5rem; }
+.how-to-title { font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:1rem;text-align:center; }
+.step { display:flex;gap:.9rem;margin-bottom:1rem;align-items:flex-start; }
+.step:last-child { margin-bottom:0; }
+.step-num { width:26px;height:26px;border-radius:50%;background:var(--green-deep);color:var(--gold);font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem; }
+.step-text { font-size:.88rem;color:var(--text-mid);line-height:1.65; }
+.step-text code { font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:.78rem;background:var(--green-deep);color:var(--gold-light);padding:.12rem .45rem;border-radius:2px; }
+.prompt-box { background:var(--code-bg);border-radius:4px;padding:1.2rem 1.4rem;margin:1rem 0;position:relative;border-left:2px solid var(--gold-dark);cursor:pointer;-webkit-tap-highlight-color:transparent; }
+.prompt-box::before { content:'⚜ TOQUE PARA COPIAR';position:absolute;top:.5rem;right:.8rem;font-family:'Cinzel',serif;font-size:.52rem;font-weight:700;letter-spacing:.15em;color:rgba(201,168,76,.35);transition:color .3s ease; }
+.prompt-box:active { transform:scale(0.985); }
+.prompt-box.copied { border-left-color:var(--gold-light); }
+.prompt-box.copied::before { content:'⚜ COPIADO ✓';color:rgba(201,168,76,.7); }
+.copy-toast { position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);z-index:200;background:var(--green-deep);color:var(--gold);font-family:'Cinzel',serif;font-size:.75rem;font-weight:600;letter-spacing:.1em;padding:.7rem 1.5rem;border-radius:4px;border:1px solid rgba(201,168,76,.3);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;box-shadow:0 8px 30px rgba(0,0,0,.3); }
+.copy-toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+body.dark-mode .copy-toast { background:#111a12;border-color:rgba(201,168,76,.4); }
+.prompt-box p { font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:.8rem;color:var(--code-text);line-height:1.75;margin:0; }
+.tip { border-left:3px solid var(--gold);padding:1.1rem 1.3rem;margin:1.3rem 0;background:linear-gradient(135deg,rgba(201,168,76,.04),rgba(201,168,76,.08));border-radius:0 4px 4px 0; }
+.tip-label { font-family:'Cinzel',serif;font-size:.63rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:.4rem; }
+.tip-label::before { content:'⚜ '; font-size:.55rem; }
+.tip p { font-size:.88rem;color:var(--text-mid);margin:0;line-height:1.7; }
+.table-wrap { overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.3rem 0;border:1px solid var(--cream-dark);border-radius:4px; }
+.table-wrap::-webkit-scrollbar { height:4px; }
+.table-wrap::-webkit-scrollbar-track { background:var(--cream); }
+.table-wrap::-webkit-scrollbar-thumb { background:var(--gold);border-radius:2px; }
+.compare-table { width:100%;border-collapse:collapse;font-size:.85rem;min-width:400px; }
+.compare-table th { text-align:left;padding:.75rem 1rem;font-family:'Cinzel',serif;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dark);border-bottom:2px solid var(--cream-dark);background:var(--cream);white-space:nowrap; }
+.compare-table td { padding:.7rem 1rem;color:var(--text-mid);border-bottom:1px solid var(--cream-dark);white-space:nowrap; }
+.compare-table tr:hover td { background:rgba(201,168,76,.03); }
+
+/* ADVANCED TECHNIQUES */
+.adv-section { max-width:820px;margin:0 auto;padding:1rem 2rem 1.5rem; }
+.adv-header { text-align:center;margin-bottom:1.8rem;padding-top:1.5rem;border-top:1px solid var(--cream-dark); }
+.adv-title { font-family:'Cinzel Decorative',serif;font-size:1.15rem;font-weight:700;color:var(--green-deep);margin-bottom:.4rem; }
+.adv-ornament { display:flex;align-items:center;justify-content:center;gap:.6rem;margin:.5rem 0 .8rem; }
+.adv-line { width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+.adv-fleur { color:var(--gold);font-size:.6rem;opacity:.4; }
+.adv-subtitle { font-size:.85rem;color:var(--text-light);font-weight:300; }
+
+.adv-card { background:var(--white);border:1px solid var(--cream-dark);border-radius:6px;padding:1.5rem 1.8rem;margin-bottom:1.2rem;position:relative; }
+.adv-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold-pale),transparent); }
+.adv-card-num { font-family:'Cinzel Decorative',serif;font-size:.9rem;font-weight:700;color:var(--gold);margin-bottom:.3rem; }
+.adv-card-title { font-family:'Cinzel',serif;font-size:.9rem;font-weight:700;color:var(--green-deep);margin-bottom:.6rem; }
+.adv-card p { font-size:.88rem;color:var(--text-mid);line-height:1.75;margin-bottom:.8rem; }
+.adv-card p:last-child { margin-bottom:0; }
+
+/* PROMPTS SECTION */
+.prompts-section { max-width:820px;margin:0 auto;padding:1rem 2rem 2.5rem; }
+.prompts-header { text-align:center;margin-bottom:1.8rem;padding-top:1.5rem;border-top:1px solid var(--cream-dark); }
+.prompts-title { font-family:'Cinzel Decorative',serif;font-size:1.15rem;font-weight:700;color:var(--green-deep);margin-bottom:.4rem; }
+.prompts-ornament { display:flex;align-items:center;justify-content:center;gap:.6rem;margin:.5rem 0 .8rem; }
+.prompts-line { width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+.prompts-fleur { color:var(--gold);font-size:.6rem;opacity:.4; }
+.prompts-subtitle { font-size:.85rem;color:var(--text-light);font-weight:300; }
+
+.prompt-card { background:var(--white);border:1px solid var(--cream-dark);border-radius:6px;padding:1.5rem 1.8rem;margin-bottom:1.2rem;position:relative; }
+.prompt-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold-pale),transparent); }
+.prompt-card-title { font-family:'Cinzel',serif;font-size:.85rem;font-weight:700;color:var(--green-deep);margin-bottom:.3rem; }
+.prompt-card-desc { font-size:.8rem;color:var(--text-light);margin-bottom:.8rem;font-weight:300; }
+
+/* FOOTER */
+.module-footer { background:var(--green-deep);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden;margin-top:1rem; }
+.module-footer::before { content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(201,168,76,.012) 3px,rgba(201,168,76,.012) 4px),repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(201,168,76,.012) 3px,rgba(201,168,76,.012) 4px); }
+.module-footer > * { position:relative;z-index:1; }
+.footer-fleur { font-size:1.6rem;color:var(--gold-dark);opacity:.25;margin-bottom:1rem; }
+.footer-brand { font-family:'Cinzel Decorative',serif;font-size:1.4rem;font-weight:700;color:var(--cream); }
+.footer-brand span { color:var(--gold); }
+.footer-ornament { display:flex;align-items:center;justify-content:center;gap:.8rem;margin:.8rem auto; }
+.footer-orn-line { width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent); }
+.module-footer p { font-size:.78rem;color:rgba(245,240,232,.4);font-weight:300; }
+.module-footer .copyright { margin-top:1rem;font-size:.65rem;opacity:.2; }
+
+
+/* ==================== WATERMARK ==================== */
+.watermark {
+  position: fixed;
+  bottom: 0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+}
+.watermark-fleur {
+  font-size: 0.6rem;
+  color: var(--gold-dark);
+}
+.watermark-text {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+  letter-spacing: 0.15em;
+}
+body.dark-mode .watermark { opacity: 0.04; }
+body.dark-mode .watermark-fleur, body.dark-mode .watermark-text { color: var(--gold); }
+
+/* ==================== POST-TRANSITION SHIMMER ==================== */
+.shimmer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 149;
+  pointer-events: none;
+  opacity: 0;
+}
+.shimmer-overlay.active {
+  animation: shimmerWave 1.2s ease-out forwards;
+}
+@keyframes shimmerWave {
+  0% { opacity: 0; background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.15) 0%, transparent 60%); }
+  15% { opacity: 1; background: radial-gradient(ellipse at 50% 10%, rgba(201,168,76,0.12) 0%, transparent 55%); }
+  30% { opacity: 0.8; background: radial-gradient(ellipse at 30% 30%, rgba(201,168,76,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 20%, rgba(201,168,76,0.06) 0%, transparent 45%); }
+  50% { opacity: 0.5; background: radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.06) 0%, transparent 40%), radial-gradient(ellipse at 80% 40%, rgba(201,168,76,0.05) 0%, transparent 40%), radial-gradient(ellipse at 50% 60%, rgba(201,168,76,0.04) 0%, transparent 50%); }
+  70% { opacity: 0.3; background: radial-gradient(ellipse at 40% 70%, rgba(201,168,76,0.04) 0%, transparent 40%), radial-gradient(ellipse at 60% 80%, rgba(201,168,76,0.03) 0%, transparent 35%); }
+  100% { opacity: 0; }
+}
+body.dark-mode .shimmer-overlay.active {
+  animation: shimmerWaveDark 1.2s ease-out forwards;
+}
+@keyframes shimmerWaveDark {
+  0% { opacity: 0; background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.2) 0%, transparent 60%); }
+  15% { opacity: 1; background: radial-gradient(ellipse at 50% 10%, rgba(201,168,76,0.15) 0%, transparent 55%); }
+  30% { opacity: 0.8; background: radial-gradient(ellipse at 30% 30%, rgba(61,122,90,0.1) 0%, transparent 50%), radial-gradient(ellipse at 70% 20%, rgba(201,168,76,0.08) 0%, transparent 45%); }
+  50% { opacity: 0.5; background: radial-gradient(ellipse at 20% 50%, rgba(61,122,90,0.06) 0%, transparent 40%), radial-gradient(ellipse at 80% 40%, rgba(201,168,76,0.06) 0%, transparent 40%), radial-gradient(ellipse at 50% 60%, rgba(201,168,76,0.05) 0%, transparent 50%); }
+  70% { opacity: 0.3; background: radial-gradient(ellipse at 40% 70%, rgba(201,168,76,0.04) 0%, transparent 40%), radial-gradient(ellipse at 60% 80%, rgba(61,122,90,0.03) 0%, transparent 35%); }
+  100% { opacity: 0; }
+}
+
+/* ==================== MEDIA PLACEHOLDERS ==================== */
+.media-example {
+  margin: 1rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--cream-dark);
+  background: var(--cream-mid);
+}
+.media-example img, .media-example video {
+  width: 100%;
+  display: block;
+  border-radius: 5px;
+}
+.media-example audio {
+  width: 100%;
+  display: block;
+  padding: 0.8rem;
+}
+.media-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  padding: 0.5rem 0.8rem 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.media-label::before { content: '⚜'; font-size: 0.5rem; }
+.media-placeholder {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.78rem;
+  font-style: italic;
+  opacity: 0.4;
+  border: 1px dashed var(--cream-dark);
+  margin: 0.5rem;
+  border-radius: 4px;
+}
+body.dark-mode .media-example { background: #0d1a12; border-color: #1e2a1e; }
+body.dark-mode .media-placeholder { border-color: #2a3a2e; }
+
+/* RESPONSIVE */
+@media (max-width:600px) {
+  .section { padding:2.5rem 1.3rem 1.5rem; }
+  .adv-section,.prompts-section { padding:1rem 1.3rem 2rem; }
+  .tool-card { padding:1.5rem; }
+  .tab-btn { padding:.8rem .7rem;font-size:.6rem; }
+  .gate-card { padding:2.5rem 1.8rem; }
+  .hero { padding:3.5rem 1.5rem 3rem; }
+  .gate-logo { font-size:1.6rem; }
+  .tool-card .corner-tl,.tool-card .corner-br { display:none; }
+}
+@keyframes fadeInUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+.tool-card { animation:fadeInUp .6s ease backwards; }
+.tool-card:nth-child(1) { animation-delay:.1s; }
+.tool-card:nth-child(2) { animation-delay:.2s; }
+.tool-card:nth-child(3) { animation-delay:.35s; }
+
+/* ==================== DARK MODE TOGGLE ==================== */
+.theme-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 200;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--green-deep);
+  color: var(--gold);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(201,168,76,0.3);
+}
+.theme-toggle .icon {
+  transition: transform 0.5s ease, opacity 0.3s ease;
+  position: absolute;
+}
+.theme-toggle .sun { opacity: 0; transform: translateY(20px) rotate(180deg); }
+.theme-toggle .moon { opacity: 1; transform: translateY(0) rotate(0deg); }
+body.dark-mode .theme-toggle .sun { opacity: 1; transform: translateY(0) rotate(0deg); }
+body.dark-mode .theme-toggle .moon { opacity: 0; transform: translateY(-20px) rotate(-180deg); }
+body.dark-mode .theme-toggle { background: #111; border-color: var(--gold-dark); }
+
+/* ==================== THEME CURTAIN ==================== */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+  transform: translateY(-102%);
+  will-change: transform;
+}
+.curtain-dark {
+  background: #0a0a0a;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 5px 20px rgba(0,0,0,0.3);
+}
+.curtain-dark::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.4), transparent);
+}
+.curtain-light {
+  background: #f5f0e8;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 5px 20px rgba(0,0,0,0.08);
+}
+.curtain-light::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to bottom, rgba(245,240,232,0.4), transparent);
+}
+
+/* Curtain enters: slides down from top */
+.curtain.enter {
+  animation: curtainEnter 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+/* Curtain exits: slides up and out */
+.curtain.exit {
+  animation: curtainExit 0.55s cubic-bezier(0.25, 0, 0.15, 1) forwards;
+}
+
+@keyframes curtainEnter {
+  0%   { transform: translateY(-102%); }
+  100% { transform: translateY(0%); }
+}
+@keyframes curtainExit {
+  0%   { transform: translateY(0%); }
+  100% { transform: translateY(102%); }
+}
+
+/* Post-transition golden shimmer */
+.shimmer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 149;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.shimmer-overlay.active {
+  animation: shimmerPulse 1s ease-out forwards;
+}
+@keyframes shimmerPulse {
+  0%   { opacity: 0; background: radial-gradient(ellipse at 50% 30%, rgba(201,168,76,0.12) 0%, transparent 60%); }
+  30%  { opacity: 1; background: radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.08) 0%, transparent 55%); }
+  60%  { opacity: 0.5; background: radial-gradient(ellipse at 40% 50%, rgba(201,168,76,0.05) 0%, transparent 45%), radial-gradient(ellipse at 65% 35%, rgba(201,168,76,0.04) 0%, transparent 40%); }
+  100% { opacity: 0; }
+}
+
+/* ==================== WATERMARK ==================== */
+.watermark {
+  position: fixed;
+  bottom: 0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+}
+.watermark-fleur {
+  font-size: 0.6rem;
+  color: var(--gold-dark);
+}
+.watermark-text {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+  letter-spacing: 0.15em;
+}
+body.dark-mode .watermark { opacity: 0.04; }
+body.dark-mode .watermark-fleur, body.dark-mode .watermark-text { color: var(--gold); }
+
+/* ==================== POST-TRANSITION SHIMMER ==================== */
+.shimmer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 149;
+  pointer-events: none;
+  opacity: 0;
+}
+.shimmer-overlay.active {
+  animation: shimmerWave 1.2s ease-out forwards;
+}
+@keyframes shimmerWave {
+  0% { opacity: 0; background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.15) 0%, transparent 60%); }
+  15% { opacity: 1; background: radial-gradient(ellipse at 50% 10%, rgba(201,168,76,0.12) 0%, transparent 55%); }
+  30% { opacity: 0.8; background: radial-gradient(ellipse at 30% 30%, rgba(201,168,76,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 20%, rgba(201,168,76,0.06) 0%, transparent 45%); }
+  50% { opacity: 0.5; background: radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.06) 0%, transparent 40%), radial-gradient(ellipse at 80% 40%, rgba(201,168,76,0.05) 0%, transparent 40%), radial-gradient(ellipse at 50% 60%, rgba(201,168,76,0.04) 0%, transparent 50%); }
+  70% { opacity: 0.3; background: radial-gradient(ellipse at 40% 70%, rgba(201,168,76,0.04) 0%, transparent 40%), radial-gradient(ellipse at 60% 80%, rgba(201,168,76,0.03) 0%, transparent 35%); }
+  100% { opacity: 0; }
+}
+body.dark-mode .shimmer-overlay.active {
+  animation: shimmerWaveDark 1.2s ease-out forwards;
+}
+@keyframes shimmerWaveDark {
+  0% { opacity: 0; background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.2) 0%, transparent 60%); }
+  15% { opacity: 1; background: radial-gradient(ellipse at 50% 10%, rgba(201,168,76,0.15) 0%, transparent 55%); }
+  30% { opacity: 0.8; background: radial-gradient(ellipse at 30% 30%, rgba(61,122,90,0.1) 0%, transparent 50%), radial-gradient(ellipse at 70% 20%, rgba(201,168,76,0.08) 0%, transparent 45%); }
+  50% { opacity: 0.5; background: radial-gradient(ellipse at 20% 50%, rgba(61,122,90,0.06) 0%, transparent 40%), radial-gradient(ellipse at 80% 40%, rgba(201,168,76,0.06) 0%, transparent 40%), radial-gradient(ellipse at 50% 60%, rgba(201,168,76,0.05) 0%, transparent 50%); }
+  70% { opacity: 0.3; background: radial-gradient(ellipse at 40% 70%, rgba(201,168,76,0.04) 0%, transparent 40%), radial-gradient(ellipse at 60% 80%, rgba(61,122,90,0.03) 0%, transparent 35%); }
+  100% { opacity: 0; }
+}
+
+/* ==================== MEDIA PLACEHOLDERS ==================== */
+.media-example {
+  margin: 1rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--cream-dark);
+  background: var(--cream-mid);
+}
+.media-example img, .media-example video {
+  width: 100%;
+  display: block;
+  border-radius: 5px;
+}
+.media-example audio {
+  width: 100%;
+  display: block;
+  padding: 0.8rem;
+}
+.media-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  padding: 0.5rem 0.8rem 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.media-label::before { content: '⚜'; font-size: 0.5rem; }
+.media-placeholder {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.78rem;
+  font-style: italic;
+  opacity: 0.4;
+  border: 1px dashed var(--cream-dark);
+  margin: 0.5rem;
+  border-radius: 4px;
+}
+body.dark-mode .media-example { background: #0d1a12; border-color: #1e2a1e; }
+body.dark-mode .media-placeholder { border-color: #2a3a2e; }
+
+/* RESPONSIVE */
+@media (max-width:600px) {
+  .section { padding:2.5rem 1.3rem 1.5rem; }
+  .adv-section,.prompts-section { padding:1rem 1.3rem 2rem; }
+  .tool-card { padding:1.5rem; }
+  .tab-btn { padding:.8rem .7rem;font-size:.6rem; }
+  .gate-card { padding:2.5rem 1.8rem; }
+  .hero { padding:3.5rem 1.5rem 3rem; }
+  .gate-logo { font-size:1.6rem; }
+  .tool-card .corner-tl,.tool-card .corner-br { display:none; }
+}
+@keyframes fadeInUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+.tool-card { animation:fadeInUp .6s ease backwards; }
+.tool-card:nth-child(1) { animation-delay:.1s; }
+.tool-card:nth-child(2) { animation-delay:.2s; }
+.tool-card:nth-child(3) { animation-delay:.35s; }
+
+/* ==================== DARK MODE TOGGLE ==================== */
+.theme-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 200;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--green-deep);
+  color: var(--gold);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(201,168,76,0.3);
+}
+.theme-toggle .icon {
+  transition: transform 0.5s ease, opacity 0.3s ease;
+  position: absolute;
+}
+.theme-toggle .sun { opacity: 0; transform: translateY(20px) rotate(180deg); }
+.theme-toggle .moon { opacity: 1; transform: translateY(0) rotate(0deg); }
+body.dark-mode .theme-toggle .sun { opacity: 1; transform: translateY(0) rotate(0deg); }
+body.dark-mode .theme-toggle .moon { opacity: 0; transform: translateY(-20px) rotate(-180deg); }
+body.dark-mode .theme-toggle { background: #111; border-color: var(--gold-dark); }
+
+/* CASCADE OVERLAY - Smooth flowing gradient */
+@keyframes sweepDark {
+  0.0% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.7) 2%, rgba(13,26,18,0.35) 5%, rgba(13,26,18,0.1) 8%, transparent 11%, transparent 100%); }
+  1.37% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 1%, rgba(10,10,10,0.7) 3%, rgba(13,26,18,0.35) 6%, rgba(13,26,18,0.1) 9%, transparent 12%, transparent 100%); }
+  2.73% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 3%, rgba(10,10,10,0.7) 5%, rgba(13,26,18,0.35) 8%, rgba(13,26,18,0.1) 11%, transparent 14%, transparent 100%); }
+  4.1% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 4%, rgba(10,10,10,0.7) 6%, rgba(13,26,18,0.35) 9%, rgba(13,26,18,0.1) 12%, transparent 15%, transparent 100%); }
+  5.46% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 5%, rgba(10,10,10,0.7) 7%, rgba(13,26,18,0.35) 10%, rgba(13,26,18,0.1) 13%, transparent 16%, transparent 100%); }
+  6.83% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 7%, rgba(10,10,10,0.7) 9%, rgba(13,26,18,0.35) 12%, rgba(13,26,18,0.1) 15%, transparent 18%, transparent 100%); }
+  8.19% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 8%, rgba(10,10,10,0.7) 10%, rgba(13,26,18,0.35) 13%, rgba(13,26,18,0.1) 16%, transparent 19%, transparent 100%); }
+  9.56% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 10%, rgba(10,10,10,0.7) 12%, rgba(13,26,18,0.35) 15%, rgba(13,26,18,0.1) 18%, transparent 21%, transparent 100%); }
+  10.92% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 11%, rgba(10,10,10,0.7) 13%, rgba(13,26,18,0.35) 16%, rgba(13,26,18,0.1) 19%, transparent 22%, transparent 100%); }
+  12.29% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 12%, rgba(10,10,10,0.7) 14%, rgba(13,26,18,0.35) 17%, rgba(13,26,18,0.1) 20%, transparent 23%, transparent 100%); }
+  13.65% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 14%, rgba(10,10,10,0.7) 16%, rgba(13,26,18,0.35) 19%, rgba(13,26,18,0.1) 22%, transparent 25%, transparent 100%); }
+  15.02% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 15%, rgba(10,10,10,0.7) 17%, rgba(13,26,18,0.35) 20%, rgba(13,26,18,0.1) 23%, transparent 26%, transparent 100%); }
+  16.38% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 16%, rgba(10,10,10,0.7) 18%, rgba(13,26,18,0.35) 21%, rgba(13,26,18,0.1) 24%, transparent 27%, transparent 100%); }
+  17.75% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 18%, rgba(10,10,10,0.7) 20%, rgba(13,26,18,0.35) 23%, rgba(13,26,18,0.1) 26%, transparent 29%, transparent 100%); }
+  19.11% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 19%, rgba(10,10,10,0.7) 21%, rgba(13,26,18,0.35) 24%, rgba(13,26,18,0.1) 27%, transparent 30%, transparent 100%); }
+  20.48% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 20%, rgba(10,10,10,0.7) 22%, rgba(13,26,18,0.35) 25%, rgba(13,26,18,0.1) 28%, transparent 31%, transparent 100%); }
+  21.84% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 22%, rgba(10,10,10,0.7) 24%, rgba(13,26,18,0.35) 27%, rgba(13,26,18,0.1) 30%, transparent 33%, transparent 100%); }
+  23.21% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 23%, rgba(10,10,10,0.7) 25%, rgba(13,26,18,0.35) 28%, rgba(13,26,18,0.1) 31%, transparent 34%, transparent 100%); }
+  24.57% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 25%, rgba(10,10,10,0.7) 27%, rgba(13,26,18,0.35) 30%, rgba(13,26,18,0.1) 33%, transparent 36%, transparent 100%); }
+  25.94% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 26%, rgba(10,10,10,0.7) 28%, rgba(13,26,18,0.35) 31%, rgba(13,26,18,0.1) 34%, transparent 37%, transparent 100%); }
+  27.3% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 27%, rgba(10,10,10,0.7) 29%, rgba(13,26,18,0.35) 32%, rgba(13,26,18,0.1) 35%, transparent 38%, transparent 100%); }
+  28.67% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 29%, rgba(10,10,10,0.7) 31%, rgba(13,26,18,0.35) 34%, rgba(13,26,18,0.1) 37%, transparent 40%, transparent 100%); }
+  30.03% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 30%, rgba(10,10,10,0.7) 32%, rgba(13,26,18,0.35) 35%, rgba(13,26,18,0.1) 38%, transparent 41%, transparent 100%); }
+  31.4% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 31%, rgba(10,10,10,0.7) 33%, rgba(13,26,18,0.35) 36%, rgba(13,26,18,0.1) 39%, transparent 42%, transparent 100%); }
+  32.76% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 33%, rgba(10,10,10,0.7) 35%, rgba(13,26,18,0.35) 38%, rgba(13,26,18,0.1) 41%, transparent 44%, transparent 100%); }
+  34.13% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 34%, rgba(10,10,10,0.7) 36%, rgba(13,26,18,0.35) 39%, rgba(13,26,18,0.1) 42%, transparent 45%, transparent 100%); }
+  35.49% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 35%, rgba(10,10,10,0.7) 37%, rgba(13,26,18,0.35) 40%, rgba(13,26,18,0.1) 43%, transparent 46%, transparent 100%); }
+  36.86% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 37%, rgba(10,10,10,0.7) 39%, rgba(13,26,18,0.35) 42%, rgba(13,26,18,0.1) 45%, transparent 48%, transparent 100%); }
+  38.22% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 38%, rgba(10,10,10,0.7) 40%, rgba(13,26,18,0.35) 43%, rgba(13,26,18,0.1) 46%, transparent 49%, transparent 100%); }
+  39.59% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 40%, rgba(10,10,10,0.7) 42%, rgba(13,26,18,0.35) 45%, rgba(13,26,18,0.1) 48%, transparent 51%, transparent 100%); }
+  40.95% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 41%, rgba(10,10,10,0.7) 43%, rgba(13,26,18,0.35) 46%, rgba(13,26,18,0.1) 49%, transparent 52%, transparent 100%); }
+  42.32% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 42%, rgba(10,10,10,0.7) 44%, rgba(13,26,18,0.35) 47%, rgba(13,26,18,0.1) 50%, transparent 53%, transparent 100%); }
+  43.68% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 44%, rgba(10,10,10,0.7) 46%, rgba(13,26,18,0.35) 49%, rgba(13,26,18,0.1) 52%, transparent 55%, transparent 100%); }
+  45.05% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 45%, rgba(10,10,10,0.7) 47%, rgba(13,26,18,0.35) 50%, rgba(13,26,18,0.1) 53%, transparent 56%, transparent 100%); }
+  46.41% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 46%, rgba(10,10,10,0.7) 48%, rgba(13,26,18,0.35) 51%, rgba(13,26,18,0.1) 54%, transparent 57%, transparent 100%); }
+  47.78% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 48%, rgba(10,10,10,0.7) 50%, rgba(13,26,18,0.35) 53%, rgba(13,26,18,0.1) 56%, transparent 59%, transparent 100%); }
+  49.14% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 49%, rgba(10,10,10,0.7) 51%, rgba(13,26,18,0.35) 54%, rgba(13,26,18,0.1) 57%, transparent 60%, transparent 100%); }
+  50.51% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 51%, rgba(10,10,10,0.7) 53%, rgba(13,26,18,0.35) 56%, rgba(13,26,18,0.1) 59%, transparent 62%, transparent 100%); }
+  51.87% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 52%, rgba(10,10,10,0.7) 54%, rgba(13,26,18,0.35) 57%, rgba(13,26,18,0.1) 60%, transparent 63%, transparent 100%); }
+  53.24% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 53%, rgba(10,10,10,0.7) 55%, rgba(13,26,18,0.35) 58%, rgba(13,26,18,0.1) 61%, transparent 64%, transparent 100%); }
+  54.6% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 55%, rgba(10,10,10,0.7) 57%, rgba(13,26,18,0.35) 60%, rgba(13,26,18,0.1) 63%, transparent 66%, transparent 100%); }
+  55.97% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 56%, rgba(10,10,10,0.7) 58%, rgba(13,26,18,0.35) 61%, rgba(13,26,18,0.1) 64%, transparent 67%, transparent 100%); }
+  57.33% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 57%, rgba(10,10,10,0.7) 59%, rgba(13,26,18,0.35) 62%, rgba(13,26,18,0.1) 65%, transparent 68%, transparent 100%); }
+  58.7% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 59%, rgba(10,10,10,0.7) 61%, rgba(13,26,18,0.35) 64%, rgba(13,26,18,0.1) 67%, transparent 70%, transparent 100%); }
+  60.06% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 60%, rgba(10,10,10,0.7) 62%, rgba(13,26,18,0.35) 65%, rgba(13,26,18,0.1) 68%, transparent 71%, transparent 100%); }
+  61.43% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 61%, rgba(10,10,10,0.7) 63%, rgba(13,26,18,0.35) 66%, rgba(13,26,18,0.1) 69%, transparent 72%, transparent 100%); }
+  62.79% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 63%, rgba(10,10,10,0.7) 65%, rgba(13,26,18,0.35) 68%, rgba(13,26,18,0.1) 71%, transparent 74%, transparent 100%); }
+  64.16% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 64%, rgba(10,10,10,0.7) 66%, rgba(13,26,18,0.35) 69%, rgba(13,26,18,0.1) 72%, transparent 75%, transparent 100%); }
+  65.52% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 66%, rgba(10,10,10,0.7) 68%, rgba(13,26,18,0.35) 71%, rgba(13,26,18,0.1) 74%, transparent 77%, transparent 100%); }
+  66.89% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 67%, rgba(10,10,10,0.7) 69%, rgba(13,26,18,0.35) 72%, rgba(13,26,18,0.1) 75%, transparent 78%, transparent 100%); }
+  68.25% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 68%, rgba(10,10,10,0.7) 70%, rgba(13,26,18,0.35) 73%, rgba(13,26,18,0.1) 76%, transparent 79%, transparent 100%); }
+  69.62% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 70%, rgba(10,10,10,0.7) 72%, rgba(13,26,18,0.35) 75%, rgba(13,26,18,0.1) 78%, transparent 81%, transparent 100%); }
+  70.98% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 71%, rgba(10,10,10,0.7) 73%, rgba(13,26,18,0.35) 76%, rgba(13,26,18,0.1) 79%, transparent 82%, transparent 100%); }
+  72.35% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 72%, rgba(10,10,10,0.7) 74%, rgba(13,26,18,0.35) 77%, rgba(13,26,18,0.1) 80%, transparent 83%, transparent 100%); }
+  73.71% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 74%, rgba(10,10,10,0.7) 76%, rgba(13,26,18,0.35) 79%, rgba(13,26,18,0.1) 82%, transparent 85%, transparent 100%); }
+  75.08% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 75%, rgba(10,10,10,0.7) 77%, rgba(13,26,18,0.35) 80%, rgba(13,26,18,0.1) 83%, transparent 86%, transparent 100%); }
+  76.44% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 76%, rgba(10,10,10,0.7) 78%, rgba(13,26,18,0.35) 81%, rgba(13,26,18,0.1) 84%, transparent 87%, transparent 100%); }
+  77.81% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 78%, rgba(10,10,10,0.7) 80%, rgba(13,26,18,0.35) 83%, rgba(13,26,18,0.1) 86%, transparent 89%, transparent 100%); }
+  79.17% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 79%, rgba(10,10,10,0.7) 81%, rgba(13,26,18,0.35) 84%, rgba(13,26,18,0.1) 87%, transparent 90%, transparent 100%); }
+  80.54% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 81%, rgba(10,10,10,0.7) 83%, rgba(13,26,18,0.35) 86%, rgba(13,26,18,0.1) 89%, transparent 92%, transparent 100%); }
+  81.9% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 82%, rgba(10,10,10,0.7) 84%, rgba(13,26,18,0.35) 87%, rgba(13,26,18,0.1) 90%, transparent 93%, transparent 100%); }
+  83.27% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 83%, rgba(10,10,10,0.7) 85%, rgba(13,26,18,0.35) 88%, rgba(13,26,18,0.1) 91%, transparent 94%, transparent 100%); }
+  84.63% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 85%, rgba(10,10,10,0.7) 87%, rgba(13,26,18,0.35) 90%, rgba(13,26,18,0.1) 93%, transparent 96%, transparent 100%); }
+  86.0% { opacity:1; background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.95) 86%, rgba(10,10,10,0.7) 88%, rgba(13,26,18,0.35) 91%, rgba(13,26,18,0.1) 94%, transparent 97%, transparent 100%); }
+  89% { opacity:1; background: rgba(10,10,10,0.85); }
+  94% { opacity:0.35; background: rgba(10,10,10,0.35); }
+  100% { opacity:0; background: rgba(10,10,10,0); }
+}
+@keyframes sweepLight {
+  0.0% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.7) 2%, rgba(245,240,232,0.35) 5%, rgba(245,240,232,0.1) 8%, transparent 11%, transparent 100%); }
+  1.37% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 1%, rgba(245,240,232,0.7) 3%, rgba(245,240,232,0.35) 6%, rgba(245,240,232,0.1) 9%, transparent 12%, transparent 100%); }
+  2.73% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 3%, rgba(245,240,232,0.7) 5%, rgba(245,240,232,0.35) 8%, rgba(245,240,232,0.1) 11%, transparent 14%, transparent 100%); }
+  4.1% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 4%, rgba(245,240,232,0.7) 6%, rgba(245,240,232,0.35) 9%, rgba(245,240,232,0.1) 12%, transparent 15%, transparent 100%); }
+  5.46% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 5%, rgba(245,240,232,0.7) 7%, rgba(245,240,232,0.35) 10%, rgba(245,240,232,0.1) 13%, transparent 16%, transparent 100%); }
+  6.83% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 7%, rgba(245,240,232,0.7) 9%, rgba(245,240,232,0.35) 12%, rgba(245,240,232,0.1) 15%, transparent 18%, transparent 100%); }
+  8.19% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 8%, rgba(245,240,232,0.7) 10%, rgba(245,240,232,0.35) 13%, rgba(245,240,232,0.1) 16%, transparent 19%, transparent 100%); }
+  9.56% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 10%, rgba(245,240,232,0.7) 12%, rgba(245,240,232,0.35) 15%, rgba(245,240,232,0.1) 18%, transparent 21%, transparent 100%); }
+  10.92% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 11%, rgba(245,240,232,0.7) 13%, rgba(245,240,232,0.35) 16%, rgba(245,240,232,0.1) 19%, transparent 22%, transparent 100%); }
+  12.29% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 12%, rgba(245,240,232,0.7) 14%, rgba(245,240,232,0.35) 17%, rgba(245,240,232,0.1) 20%, transparent 23%, transparent 100%); }
+  13.65% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 14%, rgba(245,240,232,0.7) 16%, rgba(245,240,232,0.35) 19%, rgba(245,240,232,0.1) 22%, transparent 25%, transparent 100%); }
+  15.02% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 15%, rgba(245,240,232,0.7) 17%, rgba(245,240,232,0.35) 20%, rgba(245,240,232,0.1) 23%, transparent 26%, transparent 100%); }
+  16.38% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 16%, rgba(245,240,232,0.7) 18%, rgba(245,240,232,0.35) 21%, rgba(245,240,232,0.1) 24%, transparent 27%, transparent 100%); }
+  17.75% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 18%, rgba(245,240,232,0.7) 20%, rgba(245,240,232,0.35) 23%, rgba(245,240,232,0.1) 26%, transparent 29%, transparent 100%); }
+  19.11% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 19%, rgba(245,240,232,0.7) 21%, rgba(245,240,232,0.35) 24%, rgba(245,240,232,0.1) 27%, transparent 30%, transparent 100%); }
+  20.48% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 20%, rgba(245,240,232,0.7) 22%, rgba(245,240,232,0.35) 25%, rgba(245,240,232,0.1) 28%, transparent 31%, transparent 100%); }
+  21.84% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 22%, rgba(245,240,232,0.7) 24%, rgba(245,240,232,0.35) 27%, rgba(245,240,232,0.1) 30%, transparent 33%, transparent 100%); }
+  23.21% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 23%, rgba(245,240,232,0.7) 25%, rgba(245,240,232,0.35) 28%, rgba(245,240,232,0.1) 31%, transparent 34%, transparent 100%); }
+  24.57% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 25%, rgba(245,240,232,0.7) 27%, rgba(245,240,232,0.35) 30%, rgba(245,240,232,0.1) 33%, transparent 36%, transparent 100%); }
+  25.94% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 26%, rgba(245,240,232,0.7) 28%, rgba(245,240,232,0.35) 31%, rgba(245,240,232,0.1) 34%, transparent 37%, transparent 100%); }
+  27.3% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 27%, rgba(245,240,232,0.7) 29%, rgba(245,240,232,0.35) 32%, rgba(245,240,232,0.1) 35%, transparent 38%, transparent 100%); }
+  28.67% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 29%, rgba(245,240,232,0.7) 31%, rgba(245,240,232,0.35) 34%, rgba(245,240,232,0.1) 37%, transparent 40%, transparent 100%); }
+  30.03% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 30%, rgba(245,240,232,0.7) 32%, rgba(245,240,232,0.35) 35%, rgba(245,240,232,0.1) 38%, transparent 41%, transparent 100%); }
+  31.4% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 31%, rgba(245,240,232,0.7) 33%, rgba(245,240,232,0.35) 36%, rgba(245,240,232,0.1) 39%, transparent 42%, transparent 100%); }
+  32.76% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 33%, rgba(245,240,232,0.7) 35%, rgba(245,240,232,0.35) 38%, rgba(245,240,232,0.1) 41%, transparent 44%, transparent 100%); }
+  34.13% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 34%, rgba(245,240,232,0.7) 36%, rgba(245,240,232,0.35) 39%, rgba(245,240,232,0.1) 42%, transparent 45%, transparent 100%); }
+  35.49% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 35%, rgba(245,240,232,0.7) 37%, rgba(245,240,232,0.35) 40%, rgba(245,240,232,0.1) 43%, transparent 46%, transparent 100%); }
+  36.86% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 37%, rgba(245,240,232,0.7) 39%, rgba(245,240,232,0.35) 42%, rgba(245,240,232,0.1) 45%, transparent 48%, transparent 100%); }
+  38.22% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 38%, rgba(245,240,232,0.7) 40%, rgba(245,240,232,0.35) 43%, rgba(245,240,232,0.1) 46%, transparent 49%, transparent 100%); }
+  39.59% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 40%, rgba(245,240,232,0.7) 42%, rgba(245,240,232,0.35) 45%, rgba(245,240,232,0.1) 48%, transparent 51%, transparent 100%); }
+  40.95% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 41%, rgba(245,240,232,0.7) 43%, rgba(245,240,232,0.35) 46%, rgba(245,240,232,0.1) 49%, transparent 52%, transparent 100%); }
+  42.32% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 42%, rgba(245,240,232,0.7) 44%, rgba(245,240,232,0.35) 47%, rgba(245,240,232,0.1) 50%, transparent 53%, transparent 100%); }
+  43.68% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 44%, rgba(245,240,232,0.7) 46%, rgba(245,240,232,0.35) 49%, rgba(245,240,232,0.1) 52%, transparent 55%, transparent 100%); }
+  45.05% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 45%, rgba(245,240,232,0.7) 47%, rgba(245,240,232,0.35) 50%, rgba(245,240,232,0.1) 53%, transparent 56%, transparent 100%); }
+  46.41% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 46%, rgba(245,240,232,0.7) 48%, rgba(245,240,232,0.35) 51%, rgba(245,240,232,0.1) 54%, transparent 57%, transparent 100%); }
+  47.78% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 48%, rgba(245,240,232,0.7) 50%, rgba(245,240,232,0.35) 53%, rgba(245,240,232,0.1) 56%, transparent 59%, transparent 100%); }
+  49.14% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 49%, rgba(245,240,232,0.7) 51%, rgba(245,240,232,0.35) 54%, rgba(245,240,232,0.1) 57%, transparent 60%, transparent 100%); }
+  50.51% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 51%, rgba(245,240,232,0.7) 53%, rgba(245,240,232,0.35) 56%, rgba(245,240,232,0.1) 59%, transparent 62%, transparent 100%); }
+  51.87% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 52%, rgba(245,240,232,0.7) 54%, rgba(245,240,232,0.35) 57%, rgba(245,240,232,0.1) 60%, transparent 63%, transparent 100%); }
+  53.24% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 53%, rgba(245,240,232,0.7) 55%, rgba(245,240,232,0.35) 58%, rgba(245,240,232,0.1) 61%, transparent 64%, transparent 100%); }
+  54.6% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 55%, rgba(245,240,232,0.7) 57%, rgba(245,240,232,0.35) 60%, rgba(245,240,232,0.1) 63%, transparent 66%, transparent 100%); }
+  55.97% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 56%, rgba(245,240,232,0.7) 58%, rgba(245,240,232,0.35) 61%, rgba(245,240,232,0.1) 64%, transparent 67%, transparent 100%); }
+  57.33% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 57%, rgba(245,240,232,0.7) 59%, rgba(245,240,232,0.35) 62%, rgba(245,240,232,0.1) 65%, transparent 68%, transparent 100%); }
+  58.7% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 59%, rgba(245,240,232,0.7) 61%, rgba(245,240,232,0.35) 64%, rgba(245,240,232,0.1) 67%, transparent 70%, transparent 100%); }
+  60.06% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 60%, rgba(245,240,232,0.7) 62%, rgba(245,240,232,0.35) 65%, rgba(245,240,232,0.1) 68%, transparent 71%, transparent 100%); }
+  61.43% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 61%, rgba(245,240,232,0.7) 63%, rgba(245,240,232,0.35) 66%, rgba(245,240,232,0.1) 69%, transparent 72%, transparent 100%); }
+  62.79% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 63%, rgba(245,240,232,0.7) 65%, rgba(245,240,232,0.35) 68%, rgba(245,240,232,0.1) 71%, transparent 74%, transparent 100%); }
+  64.16% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 64%, rgba(245,240,232,0.7) 66%, rgba(245,240,232,0.35) 69%, rgba(245,240,232,0.1) 72%, transparent 75%, transparent 100%); }
+  65.52% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 66%, rgba(245,240,232,0.7) 68%, rgba(245,240,232,0.35) 71%, rgba(245,240,232,0.1) 74%, transparent 77%, transparent 100%); }
+  66.89% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 67%, rgba(245,240,232,0.7) 69%, rgba(245,240,232,0.35) 72%, rgba(245,240,232,0.1) 75%, transparent 78%, transparent 100%); }
+  68.25% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 68%, rgba(245,240,232,0.7) 70%, rgba(245,240,232,0.35) 73%, rgba(245,240,232,0.1) 76%, transparent 79%, transparent 100%); }
+  69.62% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 70%, rgba(245,240,232,0.7) 72%, rgba(245,240,232,0.35) 75%, rgba(245,240,232,0.1) 78%, transparent 81%, transparent 100%); }
+  70.98% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 71%, rgba(245,240,232,0.7) 73%, rgba(245,240,232,0.35) 76%, rgba(245,240,232,0.1) 79%, transparent 82%, transparent 100%); }
+  72.35% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 72%, rgba(245,240,232,0.7) 74%, rgba(245,240,232,0.35) 77%, rgba(245,240,232,0.1) 80%, transparent 83%, transparent 100%); }
+  73.71% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 74%, rgba(245,240,232,0.7) 76%, rgba(245,240,232,0.35) 79%, rgba(245,240,232,0.1) 82%, transparent 85%, transparent 100%); }
+  75.08% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 75%, rgba(245,240,232,0.7) 77%, rgba(245,240,232,0.35) 80%, rgba(245,240,232,0.1) 83%, transparent 86%, transparent 100%); }
+  76.44% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 76%, rgba(245,240,232,0.7) 78%, rgba(245,240,232,0.35) 81%, rgba(245,240,232,0.1) 84%, transparent 87%, transparent 100%); }
+  77.81% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 78%, rgba(245,240,232,0.7) 80%, rgba(245,240,232,0.35) 83%, rgba(245,240,232,0.1) 86%, transparent 89%, transparent 100%); }
+  79.17% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 79%, rgba(245,240,232,0.7) 81%, rgba(245,240,232,0.35) 84%, rgba(245,240,232,0.1) 87%, transparent 90%, transparent 100%); }
+  80.54% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 81%, rgba(245,240,232,0.7) 83%, rgba(245,240,232,0.35) 86%, rgba(245,240,232,0.1) 89%, transparent 92%, transparent 100%); }
+  81.9% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 82%, rgba(245,240,232,0.7) 84%, rgba(245,240,232,0.35) 87%, rgba(245,240,232,0.1) 90%, transparent 93%, transparent 100%); }
+  83.27% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 83%, rgba(245,240,232,0.7) 85%, rgba(245,240,232,0.35) 88%, rgba(245,240,232,0.1) 91%, transparent 94%, transparent 100%); }
+  84.63% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 85%, rgba(245,240,232,0.7) 87%, rgba(245,240,232,0.35) 90%, rgba(245,240,232,0.1) 93%, transparent 96%, transparent 100%); }
+  86.0% { opacity:1; background: linear-gradient(to bottom, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.95) 86%, rgba(245,240,232,0.7) 88%, rgba(245,240,232,0.35) 91%, rgba(245,240,232,0.1) 94%, transparent 97%, transparent 100%); }
+  89% { opacity:1; background: rgba(245,240,232,0.85); }
+  94% { opacity:0.35; background: rgba(245,240,232,0.35); }
+  100% { opacity:0; background: rgba(245,240,232,0); }
+}
+
+
+
+/* ==================== SMOOTH THEME TRANSITIONS ==================== */
+body,
+.hero,
+.hero::after,
+.hero h1,
+.hero p,
+.hero-brand,
+.hero-fleur,
+.hero-orn-fleur,
+.tab-bar,
+.tab-btn,
+.tab-btn.active,
+.tool-card,
+.tool-card::before,
+.tool-name,
+.tool-tagline,
+.tool-body p,
+.tool-body strong,
+.tool-summary p,
+.toggle-hint,
+.how-to,
+.how-to-title,
+.step-num,
+.step-text,
+.tip,
+.tip-label,
+.tip p,
+.compare-table th,
+.compare-table td,
+.adv-card,
+.adv-card-num,
+.adv-card-title,
+.adv-card p,
+.adv-header,
+.adv-title,
+.adv-subtitle,
+.prompt-card,
+.prompt-card-title,
+.prompt-card-desc,
+.prompts-title,
+.prompts-subtitle,
+.section h2,
+.section-label,
+.section-intro,
+.module-footer,
+.module-footer p,
+.footer-brand,
+.footer-fleur,
+.media-example,
+.media-label,
+.media-placeholder,
+.watermark,
+.watermark-text,
+.watermark-fleur,
+.theme-toggle {
+  transition: background-color 0.8s ease, color 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease;
+}
+
+/* ==================== DARK MODE STYLES ==================== */
+body.dark-mode {
+  --cream: #0a0a0a;
+  --cream-mid: #141414;
+  --cream-dark: #1e2a1e;
+  --white: #111a12;
+  --text-dark: #e8e0d0;
+  --text-mid: #b8b0a0;
+  --text-light: #888078;
+  --green-deep: #0d1a12;
+  background: #0a0a0a;
+  color: #e8e0d0;
+}
+body.dark-mode .hero { background: #0d1a12; }
+body.dark-mode .tab-bar { background: #111a12; border-bottom-color: #1e2a1e; }
+body.dark-mode .tool-card { background: #111a12; border-color: #1e2a1e; }
+body.dark-mode .tool-card:hover { box-shadow: 0 10px 40px rgba(201,168,76,0.06); }
+body.dark-mode .how-to { background: #0d1a12; border-color: #1e2a1e; }
+body.dark-mode .how-to::before { background: #0d1a12; }
+body.dark-mode .tip { background: linear-gradient(135deg, rgba(201,168,76,0.04), rgba(201,168,76,0.08)); }
+body.dark-mode .compare-table th { background: #0d1a12; }
+body.dark-mode .adv-card { background: #111a12; border-color: #1e2a1e; }
+body.dark-mode .prompt-card { background: #111a12; border-color: #1e2a1e; }
+body.dark-mode .module-footer { background: #070e0a; }
+body.dark-mode .module-footer .footer-brand { color: var(--gold); }
+body.dark-mode .module-footer .footer-brand span { color: var(--gold-light); }
+body.dark-mode .module-footer p { color: rgba(201,168,76,0.5); }
+body.dark-mode .module-footer .footer-fleur { color: var(--gold); opacity: 0.4; }
+body.dark-mode .gate-input { background: rgba(255,255,255,0.04); }
+body.dark-mode .nav-link, body.dark-mode .tab-btn { color: #888078; }
+body.dark-mode .tab-btn.active { color: var(--gold); }
+body.dark-mode .section h2, body.dark-mode .tool-name, body.dark-mode .adv-card-title, body.dark-mode .prompt-card-title, body.dark-mode .adv-title, body.dark-mode .prompts-title { color: var(--gold-light); }
+body.dark-mode body::before { opacity: 0.3; }
+</style>
+</head>
+<body>
+
+<!-- GATE -->
+<div id="access-gate">
+  <div class="gate-card">
+    <div class="gate-fleur-top">⚜</div>
+    <div class="gate-logo">Prisma <span>Mar</span>IIIn</div>
+    <div class="gate-divider-wrap"><div class="gate-divider-line"></div><div class="gate-divider-fleur">⚜</div><div class="gate-divider-line"></div></div>
+    <div class="gate-subtitle">Guia de Inteligência Artificial</div>
+    <input type="text" class="gate-input" id="access-code" placeholder="Insira seu código de acesso" maxlength="25" autocomplete="off">
+    <button class="gate-btn" id="access-btn">⚜ &nbsp;Desbloquear&nbsp; ⚜</button>
+    <div class="gate-error" id="gate-error">Código inválido. Verifique e tente novamente.</div>
+    <div class="gate-footer-ornament"><div class="gate-footer-line"></div><span style="color:var(--gold);font-size:.6rem;opacity:.5;">⚜</span><div class="gate-footer-line"></div></div>
+  </div>
+</div>
+
+<!-- VIDEO INTRO -->
+<div id="video-intro">
+  <video id="intro-video" playsinline><source src="intro-prisma.mp4" type="video/mp4"></video>
+  <div class="skip-hint">Pressione qualquer tecla ou toque para pular</div>
+</div>
+
+<!-- MAIN -->
+<div id="main-content">
+  <div class="curtain curtain-dark" id="curtain-dark"></div>
+  <div class="curtain curtain-light" id="curtain-light"></div>
+  <div class="shimmer-overlay" id="shimmer-overlay"></div>
+  <div class="watermark"><span class="watermark-fleur">⚜</span><span class="watermark-text">MarIIIn</span><span class="watermark-fleur">⚜</span></div>
+  <div class="copy-toast" id="copy-toast">⚜ Prompt copiado!</div>
+  <button class="theme-toggle" id="theme-toggle" title="Alternar modo noturno">
+    <span class="icon moon">🌙</span>
+    <span class="icon sun">☀️</span>
+  </button>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-fleur">⚜</div>
+      <div class="hero-brand">Prisma MarIIIn</div>
+      <h1>Guia Prático de<em>Inteligência Artificial</em></h1>
+      <div class="hero-ornament"><div class="hero-orn-line"></div><div class="hero-orn-fleur">⚜</div><div class="hero-orn-line"></div></div>
+      <p>Domine as ferramentas de IA mais poderosas do mercado. Texto, imagem, vídeo, código e música — tudo para transformar a forma como você trabalha e cria.</p>
+    </div>
+  </section>
+
+  <nav class="tab-bar">
+    <div class="tab-inner">
+      <button class="tab-btn active" data-tab="texto">Texto</button>
+      <span class="tab-fleur">⚜</span>
+      <button class="tab-btn" data-tab="imagem">Imagem</button>
+      <span class="tab-fleur">⚜</span>
+      <button class="tab-btn" data-tab="video">Vídeo</button>
+      <span class="tab-fleur">⚜</span>
+      <button class="tab-btn" data-tab="codigo">Código</button>
+      <span class="tab-fleur">⚜</span>
+      <button class="tab-btn" data-tab="musica">Música</button>
+    </div>
+  </nav>
+
+  <!-- ======================== MÓDULO TEXTO ======================== -->
+  <div class="module-panel active" id="mod-texto">
+    <section class="section">
+      <div class="section-header">
+        <div class="section-label">Módulo 01</div>
+        <h2>IAs de Texto</h2>
+        <div class="section-h2-ornament"><div class="section-h2-line"></div><div class="section-h2-fleur">⚜</div><div class="section-h2-line"></div></div>
+        <p class="section-intro">Assistentes de texto são a base de tudo. Eles não apenas respondem perguntas — eles pensam, analisam, criam e até dirigem outras IAs. Dominar essa ferramenta é dominar todas as outras.</p>
+      </div>
+
+      <!-- CLAUDE -->
+      <div class="tool-card" onclick="this.classList.toggle('expanded')">
+        <span class="corner-tl">⚜</span><span class="corner-br">⚜</span>
+        <div class="tool-header"><div class="tool-icon text">✦</div><div><div class="tool-name">Claude <span class="badge best">Recomendado</span></div><div class="tool-tagline">Anthropic — A IA mais inteligente disponível</div></div></div>
+        <div class="tool-summary"><p>O Claude é, no momento, a inteligência artificial de texto mais avançada do mundo. Seu modelo topo de linha, o Opus, opera em um nível de raciocínio, criatividade e precisão que está genuinamente acima de qualquer concorrente. Se você vai usar apenas uma IA, que seja esta.</p></div>
+        <div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div>
+        <div class="tool-full">
+          <div class="tool-body">
+            <p>O que torna o Claude diferente não é apenas a qualidade das respostas — é a <strong>profundidade do raciocínio</strong>. Enquanto outras IAs tendem a dar respostas superficiais ou genéricas, o Claude analisa o contexto completo da sua pergunta, considera múltiplos ângulos e entrega uma resposta que demonstra compreensão real do problema. Ele não apenas repete informações — ele pensa.</p>
+            <p>Outro diferencial crucial: <strong>honestidade</strong>. Quando o Claude não sabe algo, ele diz que não sabe. Parece simples, mas a maioria das IAs inventa respostas com confiança quando não tem certeza (isso se chama "alucinação"). O Claude foi treinado para priorizar precisão sobre impressionar — e isso faz toda a diferença quando você depende da resposta para tomar decisões.</p>
+            <p><strong>O Claude como "diretor criativo":</strong> uma das técnicas mais poderosas que descobrimos é usar o Claude para gerar prompts otimizados para outras IAs. O Claude não gera imagens, mas ele entende vocabulário técnico de fotografia, cinematografia e design melhor do que você conseguiria escrever sozinho. Peça para ele criar o prompt perfeito para o Z-Image ou Kling, e o resultado será drasticamente superior ao que você conseguiria escrevendo direto.</p>
+            <p><strong>Modelos disponíveis:</strong> o Claude possui diferentes versões. O <strong>Sonnet</strong> é o modelo do plano gratuito — já excelente para a maioria das tarefas do dia a dia. O <strong>Opus</strong> é o topo de linha, disponível no plano Pro, e opera em outro patamar: raciocínio mais profundo, respostas mais nuançadas, compreensão de contextos mais complexos. Se o Sonnet é um profissional competente, o Opus é um gênio da área.</p>
+            <p><strong>Funcionalidades avançadas:</strong> o Claude não se limita a texto. Ele analisa imagens (fotos, screenshots, documentos escaneados), PDFs inteiros, planilhas e arquivos de código. Você pode enviar uma foto de um contrato e pedir para ele resumir os pontos importantes. Pode enviar uma planilha financeira e pedir análise. Pode mandar um print de erro e pedir solução. Tudo na mesma conversa.</p>
+            <p><strong>Para que serve na prática:</strong> escrever conteúdo para redes sociais, criar estratégias de negócio, analisar contratos e documentos, programar aplicativos e sites, traduzir com contexto cultural, resumir artigos e livros, montar planilhas financeiras, pesquisar qualquer assunto em profundidade, criar anúncios de venda, responder clientes de forma profissional, gerar prompts para outras IAs de imagem, vídeo e música, e literalmente qualquer tarefa que envolva raciocínio e texto.</p>
+            <div class="how-to">
+              <div class="how-to-title">Como Começar</div>
+              <div class="step"><div class="step-num">1</div><div class="step-text">Acesse <code>claude.ai</code> e crie uma conta gratuita com e-mail ou Google. O cadastro leva menos de 1 minuto.</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">Na tela de conversa, digite sua pergunta de forma clara e detalhada. Dê contexto: quem você é, o que precisa, para que vai usar. Quanto mais informação, mais precisa e útil a resposta. Exemplo: em vez de "escreve um anúncio", diga "escreve um anúncio para Facebook Marketplace de um Xiaomi Redmi Note 14 5G lacrado, preço R$ 1.249 no PIX, destaque que é versão global com garantia".</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Envie fotos, PDFs, planilhas e documentos junto com sua mensagem. Basta arrastar o arquivo para a conversa ou clicar no ícone de anexo. O Claude analisa o conteúdo completo e responde com base no que leu.</div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text">Continue a conversa naturalmente. Peça ajustes, refinamentos, ou mude completamente de assunto — o Claude mantém o contexto de tudo que foi dito. Quanto mais longa a conversa, mais ele entende suas necessidades.</div></div>
+              <div class="step"><div class="step-num">5</div><div class="step-text">O plano gratuito oferece acesso ao modelo Sonnet com um limite diário generoso. O plano Pro (US$ 20/mês) desbloqueia o Opus, aumenta significativamente o limite de mensagens, e dá acesso a funcionalidades como pesquisa na web em tempo real e criação de arquivos.</div></div>
+            </div>
+            <div class="tip"><div class="tip-label">Dica Prisma</div><p>Não trate o Claude como um buscador do Google. Trate como um consultor especialista. Comece a conversa explicando seu contexto completo: quem você é, o que faz, qual seu objetivo. Depois peça para ele "agir como" o profissional que você precisa — engenheiro, advogado, designer, copywriter. A diferença nos resultados é abismal. Uma conversa de 5 minutos com contexto produz resultados melhores do que 20 perguntas soltas.</p></div>
+            <div class="media-example"><div class="media-label">Exemplo em Ação</div><img src="assets/texto-claude-exemplo.jpg" alt="Exemplo de uso do Claude"><div class="media-placeholder">Imagem: texto-claude-exemplo.jpg</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEEPSEEK -->
+      <div class="tool-card" onclick="this.classList.toggle('expanded')">
+        <span class="corner-tl">⚜</span><span class="corner-br">⚜</span>
+        <div class="tool-header"><div class="tool-icon text">◇</div><div><div class="tool-name">DeepSeek <span class="badge free">Gratuito</span></div><div class="tool-tagline">A melhor alternativa gratuita com raciocínio forte</div></div></div>
+        <div class="tool-summary"><p>O DeepSeek surpreendeu o mercado ao entregar capacidade de raciocínio avançado sem cobrar nada. Para quem não pode investir no Claude Pro, o DeepSeek é a alternativa mais inteligente disponível gratuitamente.</p></div>
+        <div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div>
+        <div class="tool-full">
+          <div class="tool-body">
+            <p>O DeepSeek R1 introduziu um conceito chamado <strong>"chain of thought"</strong> — a IA mostra seu raciocínio passo a passo antes de entregar a resposta final. Isso permite que você acompanhe como ela chegou à conclusão, o que é especialmente útil para problemas complexos de matemática, lógica e análise. É como ver a resolução de um problema no quadro-negro antes de ver a resposta.</p>
+            <p>Em termos de qualidade bruta, o DeepSeek fica atrás do Claude Opus em escrita criativa, nuance e compreensão contextual profunda. Mas para tarefas de raciocínio lógico, resolução de problemas e análise técnica, ele entrega resultados surpreendentemente bons — tudo de graça. Se você não pode investir em plano Pro de nenhuma IA, o DeepSeek é sua melhor escolha.</p>
+            <p><strong>Pontos fortes:</strong> raciocínio matemático e lógico, programação, análise de dados, resolução de problemas técnicos complexos, explicações detalhadas passo a passo. O modo "Deep Think" é particularmente impressionante — ele dedica mais tempo para raciocinar antes de responder, resultando em respostas mais profundas e precisas.</p>
+            <p><strong>Limitações honestas:</strong> escrita criativa menos refinada que o Claude, compreensão de contexto cultural brasileiro limitada, menos consistente em tarefas que exigem sensibilidade e nuance. Para escrever anúncios de venda, posts para redes sociais ou conteúdo que precisa de "toque humano", prefira o Claude.</p>
+            <p><strong>Quando usar DeepSeek vs Claude:</strong> precisa resolver um problema técnico ou matemático? DeepSeek. Precisa escrever algo criativo, persuasivo ou analisar algo com nuance? Claude. Ambos são gratuitos para uso básico, então o ideal é ter os dois no seu arsenal.</p>
+            <div class="how-to">
+              <div class="how-to-title">Como Começar</div>
+              <div class="step"><div class="step-num">1</div><div class="step-text">Acesse <code>chat.deepseek.com</code> e crie uma conta gratuita. Também há o app disponível para Android e iOS.</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">Ative o modo <strong>"Deep Think (R1)"</strong> para respostas com raciocínio avançado. Esse modo demora um pouco mais mas entrega resultados significativamente melhores.</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Para problemas técnicos, seja o mais específico possível. Inclua dados, números e contexto. O DeepSeek se destaca quando tem material concreto para analisar.</div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text">Combine com o Claude: use o DeepSeek para resolver a parte técnica/analítica, depois passe o resultado pro Claude refinar a apresentação e escrita.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHATGPT -->
+      <div class="tool-card" onclick="this.classList.toggle('expanded')">
+        <span class="corner-tl">⚜</span><span class="corner-br">⚜</span>
+        <div class="tool-header"><div class="tool-icon text">◆</div><div><div class="tool-name">ChatGPT</div><div class="tool-tagline">OpenAI — O mais popular e versátil</div></div></div>
+        <div class="tool-summary"><p>O ChatGPT é a IA que popularizou tudo isso. Com o maior ecossistema de integrações, app mobile excelente e capacidade de navegar na internet em tempo real, é uma ferramenta versátil que todo mundo deveria conhecer.</p></div>
+        <div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div>
+        <div class="tool-full">
+          <div class="tool-body">
+            <p>O ChatGPT tem a vantagem do ecossistema: gera imagens com DALL-E, navega na internet, tem plugins, um app mobile muito polido e a maior base de usuários do mercado. Isso significa que há mais tutoriais, mais GPTs personalizados e mais recursos disponíveis para ele do que para qualquer outro.</p>
+            <p>Em qualidade pura de raciocínio e texto, fica um degrau abaixo do Claude Opus, mas acima da maioria dos outros modelos. O GPT-4o é capaz e rápido; o modelo o1/o3 traz raciocínio mais profundo para tarefas complexas.</p>
+            <div class="how-to">
+              <div class="how-to-title">Como Começar</div>
+              <div class="step"><div class="step-num">1</div><div class="step-text">Acesse <code>chat.openai.com</code> ou baixe o app "ChatGPT".</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">Plano gratuito: GPT-4o mini. Plus (US$ 20/mês): GPT-4o completo + ferramentas avançadas.</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Explore os GPTs — versões especializadas criadas pela comunidade para tarefas específicas.</div></div>
+            </div>
+            <div class="table-wrap"><table class="compare-table">
+              <tr><th>Comparativo</th><th>Claude Opus</th><th>DeepSeek R1</th><th>ChatGPT 4o</th></tr>
+              <tr><td>Qualidade de texto</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr>
+              <tr><td>Raciocínio lógico</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr>
+              <tr><td>Criatividade</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr>
+              <tr><td>Navegação web</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr>
+              <tr><td>Plano gratuito</td><td>Bom (Sonnet)</td><td>Excelente</td><td>Bom (4o mini)</td></tr>
+              <tr><td>Custo Pro</td><td>US$ 20/mês</td><td>Gratuito</td><td>US$ 20/mês</td></tr>
+            </table></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÉCNICAS AVANÇADAS TEXTO -->
+    <div class="adv-section">
+      <div class="adv-header">
+        <div class="adv-title">Técnicas Avançadas</div>
+        <div class="adv-ornament"><div class="adv-line"></div><div class="adv-fleur">⚜</div><div class="adv-line"></div></div>
+        <div class="adv-subtitle">Segredos do ofício para extrair o máximo das IAs de texto</div>
+      </div>
+      <div class="adv-card"><div class="adv-card-num">01</div><div class="adv-card-title">Claude Como Diretor Criativo</div><p>Use o Claude para gerar prompts otimizados para outras IAs. Ao invés de escrever "foto bonita de celular", peça ao Claude: "crie um prompt técnico de fotografia de produto para o Z-Image, incluindo tipo de lente, iluminação, composição e estilo editorial". O resultado será um prompt com vocabulário técnico que puxa a IA de imagem para um nível muito superior.</p><p>Essa técnica funciona para imagem, vídeo e música. O Claude entende a linguagem de cada área e traduz sua ideia em instruções precisas.</p><div class="media-example"><div class="media-label">Exemplo: Prompt Gerado pelo Claude</div><img src="assets/texto-diretor-criativo.jpg" alt="Claude gerando prompt para IA de imagem"><div class="media-placeholder">Imagem: texto-diretor-criativo.jpg</div></div></div>
+      <div class="adv-card"><div class="adv-card-num">02</div><div class="adv-card-title">A Linguagem Certa Destrava Resultados</div><p>A forma como você enquadra um pedido muda completamente o comportamento da IA. Dizer "fotografia editorial" gera resultados radicalmente diferentes de "foto bonita". Termos como "hipoteticamente", "por exemplo", ou "simule um cenário onde..." podem destravar respostas que um pedido direto não consegue.</p><p>Exemplo real: ao tentar editar uma imagem de uma pessoa gerada por IA, a ferramenta se recusava por achar que era uma pessoa real. Ao dizer "esta é uma modelo gerada por inteligência artificial", a edição foi liberada imediatamente. A palavra certa no momento certo faz toda a diferença.</p></div>
+      <div class="adv-card"><div class="adv-card-num">03</div><div class="adv-card-title">Contexto Acumulativo</div><p>Quanto mais contexto você dá numa conversa, mais refinadas ficam as respostas. Não trate cada pergunta como isolada — construa uma conversa que acumula entendimento. Diga quem você é, o que faz, qual seu objetivo. A IA vai calibrando as respostas ao longo da conversa, ficando cada vez mais precisa e personalizada.</p><p>Dica: em conversas longas e importantes, comece dizendo "Vou te explicar meu contexto completo antes de pedir qualquer coisa". Isso sinaliza para a IA que ela deve absorver antes de agir.</p></div>
+      <div class="adv-card"><div class="adv-card-num">04</div><div class="adv-card-title">Prompts em Camadas</div><p>Não tente acertar o prompt perfeito de primeira. Comece com uma versão genérica e vá refinando em rodadas. "Escreva um anúncio para celular" → "Agora deixe mais direto e objetivo" → "Adicione um senso de urgência sutil" → "Reduza para 5 linhas". Cada camada de refinamento melhora o resultado sem precisar reescrever tudo do zero.</p><p>Essa técnica funciona especialmente bem com o Claude, que mantém contexto ao longo da conversa. Cada refinamento é informado por tudo que veio antes, então as melhorias são cumulativas. Em 3-4 rodadas, você chega num resultado que levaria muito mais tempo tentando acertar de primeira.</p></div>
+      <div class="adv-card"><div class="adv-card-num">05</div><div class="adv-card-title">O Poder do "Aja Como"</div><p>Quando você diz "aja como um engenheiro de software sênior com 15 anos de experiência", a IA recalibra completamente suas respostas. Ela passa a usar vocabulário técnico, considerar edge cases, pensar em escalabilidade e manutenção — coisas que não faria com uma pergunta genérica. O mesmo funciona para qualquer área: "aja como um advogado tributarista", "aja como um nutricionista esportivo", "aja como um copywriter da Apple".</p><p>O segredo é ser específico no perfil: não apenas "engenheiro", mas "engenheiro especializado em [sua necessidade]". Quanto mais detalhado o perfil, mais calibrada a resposta.</p></div>
+      <div class="adv-card"><div class="adv-card-num">06</div><div class="adv-card-title">Quando Usar Cada IA</div><p>Cada IA tem seu ponto forte. Claude Opus: escrita criativa, análise nuançada, raciocínio complexo, dirigir outras IAs. DeepSeek R1: matemática, lógica, programação, análise técnica (gratuito). ChatGPT: navegação web em tempo real, ecossistema de plugins, GPTs especializados. A estratégia ideal é ter os três à disposição e usar cada um para o que faz melhor. Não existe "a melhor IA" para tudo — existe a IA certa para cada tarefa.</p></div>
+    </div>
+
+    <!-- PROMPTS TEXTO -->
+    <div class="prompts-section">
+      <div class="prompts-header">
+        <div class="prompts-title">Prompts Prontos</div>
+        <div class="prompts-ornament"><div class="prompts-line"></div><div class="prompts-fleur">⚜</div><div class="prompts-line"></div></div>
+        <div class="prompts-subtitle">Copie, cole e adapte</div>
+      </div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Especialista Sob Demanda</div><div class="prompt-card-desc">Transforme a IA em qualquer profissional</div><div class="prompt-box"><p>Você é um [engenheiro/advogado/nutricionista/designer/etc] com 20 anos de experiência. Aja como esse profissional em todas as suas respostas a partir de agora. Use o vocabulário técnico da área, considere as melhores práticas do mercado, e me dê respostas que eu receberia de uma consultoria profissional. Meu contexto: [descreva sua situação]. Minha primeira pergunta é: [sua pergunta].</p></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Diretor Criativo de IAs</div><div class="prompt-card-desc">Use o Claude para guiar outras IAs</div><div class="prompt-box"><p>Preciso que você crie um prompt otimizado para uma IA de [imagem/vídeo/música]. O objetivo é gerar [descreva o que quer]. Inclua vocabulário técnico relevante da área (se for imagem: tipo de lente, iluminação, composição; se for vídeo: movimento de câmera, ritmo, estilo; se for música: BPM, tom, instrumentação). O prompt deve ser em inglês e detalhado o suficiente para gerar um resultado profissional na primeira tentativa.</p></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Empreendedor Estratégico</div><div class="prompt-card-desc">Análise de negócio e tomada de decisão</div><div class="prompt-box"><p>Você é um empreendedor de sucesso com experiência em [seu setor]. Analise minha situação atual: [descreva seu negócio, faturamento, desafios]. Me dê uma análise estratégica com: 1) Diagnóstico honesto do que está funcionando e o que não está, 2) As 3 ações de maior impacto que eu deveria fazer nos próximos 30 dias, 3) Riscos que eu talvez não esteja enxergando. Seja direto e prático — não precisa ser gentil, precisa ser útil.</p></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Criador de Anúncios</div><div class="prompt-card-desc">Anúncios que vendem em Marketplace e grupos</div><div class="prompt-box"><p>Crie um anúncio de venda para Facebook Marketplace. Produto: [nome e specs]. Preço: [valor PIX] / [valor cartão]. Diferenciais: [lacrado, versão global, entrega no dia, etc]. O anúncio deve ter no máximo 8 linhas, começar com o preço, destacar o principal diferencial competitivo, e incluir urgência sutil. Linguagem direta, sem exageros. No máximo 2 emojis. Crie 3 variações para eu testar qual converte melhor.</p></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Atendimento Profissional</div><div class="prompt-card-desc">Respostas que fecham vendas</div><div class="prompt-box"><p>Aja como atendente de uma loja de eletrônicos premium. Um cliente mandou: "[cole a mensagem do cliente]". O produto é [nome + specs + preço]. Responda de forma educada, confiante e objetiva. Se pediu desconto, meu limite mínimo é R$ [valor] — justifique o preço com base nos diferenciais (versão global, lacrado, entrega imediata, garantia pessoal). Mantenha tom acolhedor mas profissional. Nunca pareça desesperado para vender.</p></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Resumidor Inteligente</div><div class="prompt-card-desc">Transforme qualquer conteúdo longo em essência</div><div class="prompt-box"><p>Resuma o conteúdo abaixo em 3 níveis: 1) Uma frase que capture a essência, 2) Um parágrafo com os pontos principais, 3) Uma lista com os 5 insights mais importantes para alguém que [seu contexto/objetivo]. Conteúdo: [cole o texto ou envie o arquivo].</p></div></div>
+    </div>
+
+    <footer class="module-footer"><div class="footer-fleur">⚜</div><div class="footer-brand">Prisma <span>Mar</span>IIIn</div><div class="footer-ornament"><div class="footer-orn-line"></div><span style="color:var(--gold-dark);font-size:.6rem;opacity:.4;">⚜</span><div class="footer-orn-line"></div></div><p>Importação e Inovação com Inteligência</p><p class="copyright">Conteúdo exclusivo para clientes Prisma MarIIIn</p></footer>
+  </div>
+
+  <!-- ======================== MÓDULO IMAGEM ======================== -->
+  <div class="module-panel" id="mod-imagem">
+    <section class="section">
+      <div class="section-header">
+        <div class="section-label">Módulo 02</div>
+        <h2>IAs de Imagem</h2>
+        <div class="section-h2-ornament"><div class="section-h2-line"></div><div class="section-h2-fleur">⚜</div><div class="section-h2-line"></div></div>
+        <p class="section-intro">Crie fotos profissionais, retratos realistas e arte digital de qualidade comercial usando apenas palavras. Sem câmera, sem estúdio, sem Photoshop.</p>
+      </div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon image">🎨</div><div><div class="tool-name">Z-Image <span class="badge best">Fotorrealismo</span></div><div class="tool-tagline">Imagens que enganam qualquer olho</div></div></div><div class="tool-summary"><p>O Z-Image é a ferramenta que mais se aproxima de uma fotografia real. Os resultados são tão convincentes que é praticamente impossível distinguir de uma foto tirada com câmera profissional. É a base da nossa criação visual na Prisma MarIIIn.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>A força do Z-Image está no fotorrealismo puro. Ele entende iluminação natural, textura de pele, reflexos em superfícies e profundidade de campo de uma forma que outras ferramentas simplesmente não conseguem replicar. Para fotos de produto, lifestyle e conteúdo de marca, é imbatível.</p><p>A técnica mais poderosa com o Z-Image é o <strong>pipeline de criação</strong>: gere a imagem perfeita aqui, depois anime no Kling AI. Você parte de uma base visual já aprovada em vez de depender do vídeo acertar tudo do zero. Essa combinação é o nosso workflow principal na Prisma MarIIIn.</p><p><strong>Entendendo a composição:</strong> a IA não "pensa" em composição sozinha — você precisa guiar. Termos como "rule of thirds", "centered composition", "negative space", "leading lines" instruem a IA sobre como organizar os elementos na imagem. Uma foto de produto "centralizada com espaço negativo ao redor" tem um impacto visual completamente diferente de uma foto sem essas instruções.</p><p><strong>A importância da iluminação no prompt:</strong> iluminação é 70% de uma boa foto. Termos que fazem diferença real: "Rembrandt lighting" (sombra triangular no rosto), "butterfly lighting" (sombra borboleta abaixo do nariz — clássico de beleza), "split lighting" (metade luz, metade sombra), "golden hour" (luz dourada quente), "blue hour" (luz azulada fria), "backlit" (luz vindo de trás do sujeito, cria silhueta). Cada uma gera um resultado radicalmente diferente.</p><p><strong>Resolução e proporção:</strong> defina proporção conforme o destino da imagem: 1:1 para posts de feed, 9:16 para stories e reels, 16:9 para banners e thumbnails, 4:5 para posts otimizados no Instagram. Sempre peça "8K resolution" ou "ultra high resolution" para garantir a máxima qualidade.</p><div class="how-to"><div class="how-to-title">Como Usar</div><div class="step"><div class="step-num">1</div><div class="step-text">Acesse a plataforma e crie sua conta.</div></div><div class="step"><div class="step-num">2</div><div class="step-text">Descreva a imagem com detalhes técnicos: cenário, iluminação (softbox, golden hour, Rembrandt, butterfly), ângulo de câmera (low angle, eye level, bird's eye), cores dominantes e mood geral.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">Mencione câmeras e lentes reais no prompt. "Shot on Canon EOS R5 with 85mm f/1.4" ou "Sony A7IV 90mm macro" — isso puxa a IA para replicar o visual dessas configurações com fidelidade.</div></div><div class="step"><div class="step-num">4</div><div class="step-text">Adicione negative prompts ao final: "no blur, no watermark, no text overlay, no deformation, no extra fingers, no cropped frame". Isso elimina artefatos comuns.</div></div><div class="step"><div class="step-num">5</div><div class="step-text">Gere 3-4 variações e selecione a melhor. Salve o seed das que gostar — isso permite criar variações consistentes mantendo o mesmo estilo e composição.</div></div></div><div class="tip"><div class="tip-label">Dica Prisma</div><p>Peça ao Claude para criar seu prompt antes de usar o Z-Image. Diga ao Claude: "crie um prompt técnico de fotografia de produto para gerar uma imagem ultrarrealista de [seu produto]". O Claude vai incluir vocabulário técnico de fotografia que você nem sabia que existia — e o resultado no Z-Image será profissional desde a primeira geração.</p></div></div></div></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon image">🍌</div><div><div class="tool-name">NanoBanana Pro</div><div class="tool-tagline">Controle granular de cada detalhe</div></div></div><div class="tool-summary"><p>O NanoBanana Pro oferece o controle mais preciso sobre o resultado final. Se o Z-Image é o fotógrafo, o NanoBanana é o diretor de arte que ajusta cada detalhe milimetricamente.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>A grande vantagem do NanoBanana é o <strong>controle granular</strong>: guidance scale (quanto a IA segue seu prompt), steps (qualidade de renderização) e seed (reprodutibilidade). Isso permite ajustar fino em cada geração em vez de depender da sorte.</p><p><strong>Atenção com edições:</strong> ao editar imagens de pessoas geradas por IA, sempre especifique que se trata de "uma modelo gerada por inteligência artificial" ou "personagem digital". Sem essa especificação, a ferramenta pode se recusar a modificar a imagem por interpretar como pessoa real.</p><div class="how-to"><div class="how-to-title">Como Usar</div><div class="step"><div class="step-num">1</div><div class="step-text">Acesse o NanoBanana Pro e crie sua conta.</div></div><div class="step"><div class="step-num">2</div><div class="step-text">Inclua detalhes técnicos: lente (85mm f/1.4), iluminação (Rembrandt, butterfly, split), estilo (editorial, lifestyle, commercial).</div></div><div class="step"><div class="step-num">3</div><div class="step-text">Ajuste guidance scale (7-12 para fotorrealismo), steps (30-50 para alta qualidade) e salve seeds de resultados bons.</div></div></div></div></div></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon image">✧</div><div><div class="tool-name">Midjourney <span class="badge paid">Pago</span></div><div class="tool-tagline">Quando a imagem precisa ser arte</div></div></div><div class="tool-summary"><p>O Midjourney não compete em fotorrealismo — ele compete em impacto artístico. É a ferramenta que cria imagens com composição cinematográfica e uma qualidade estética que parece obra de artista profissional. A partir de US$ 10/mês.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>Use Z-Image e NanoBanana para fotos realistas. Use Midjourney para tudo que precisa de <strong>impacto artístico</strong>: banners, thumbnails, wallpapers, identidade visual, arte conceitual, ilustrações estilizadas.</p><div class="how-to"><div class="how-to-title">Como Usar</div><div class="step"><div class="step-num">1</div><div class="step-text">Acesse <code>midjourney.com</code> e crie uma conta.</div></div><div class="step"><div class="step-num">2</div><div class="step-text">Use a interface web — digite o prompt e clique em criar.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">Parâmetros: <code>--ar 16:9</code> proporção, <code>--style raw</code> mais realismo, <code>--v 7</code> versão mais recente, <code>--q 2</code> máxima qualidade.</div></div></div></div></div></div>
+    </section>
+
+    <div class="adv-section"><div class="adv-header"><div class="adv-title">Técnicas Avançadas</div><div class="adv-ornament"><div class="adv-line"></div><div class="adv-fleur">⚜</div><div class="adv-line"></div></div><div class="adv-subtitle">Segredos para gerar imagens de nível profissional</div></div>
+      <div class="adv-card"><div class="adv-card-num">01</div><div class="adv-card-title">Referências Técnicas de Fotografia</div><p>Mencionar câmeras, lentes e técnicas reais de fotografia nos prompts eleva drasticamente a qualidade. Em vez de "foto bonita de pessoa", use "portrait shot on Canon EOS R5, 85mm f/1.4, Rembrandt lighting, shallow depth of field". A IA "conhece" o visual dessas configurações e replica com fidelidade.</p></div>
+      <div class="adv-card"><div class="adv-card-num">02</div><div class="adv-card-title">Negative Prompts — O Que Excluir</div><p>Diga à IA o que NÃO colocar na imagem. Adicione ao final do prompt: "no blur, no watermark, no text, no deformation, no extra limbs, no cropped frame". Isso elimina artefatos comuns e limpa significativamente o resultado.</p></div>
+      <div class="adv-card"><div class="adv-card-num">03</div><div class="adv-card-title">Seed e Reprodutibilidade</div><p>Quando gerar uma imagem que gostou, salve o número de seed. Isso permite criar variações da mesma imagem mantendo o estilo e composição consistentes. Essencial para construir identidade visual coerente — como todas as fotos parecerem da mesma "sessão fotográfica".</p></div>
+      <div class="adv-card"><div class="adv-card-num">04</div><div class="adv-card-title">Desbloqueando Edições</div><p>Se a IA se recusar a editar uma imagem de rosto, especifique que é "modelo gerada por IA" ou "personagem digital renderizado". Ferramentas como NanoBanana bloqueiam edições em rostos que interpretam como pessoas reais — essa simples clarificação resolve o problema. Essa técnica de "enquadramento" se aplica a diversas situações: a forma como você descreve o contexto muda completamente o comportamento da ferramenta.</p></div>
+      <div class="adv-card"><div class="adv-card-num">05</div><div class="adv-card-title">Upscaling Inteligente — Melhore Sem Alterar</div><p>Uma das técnicas mais úteis: melhorar a resolução e nitidez de uma imagem sem alterar nenhum detalhe do conteúdo. O segredo está no prompt: seja explícito sobre o que NÃO deve mudar (rosto, fisiologia, cenário, cores, composição) e o que DEVE melhorar (sharpness, resolution, noise reduction). É como ter um fotógrafo profissional que apenas ajusta as configurações da câmera sem mudar a pose ou o cenário.</p></div>
+      <div class="adv-card"><div class="adv-card-num">06</div><div class="adv-card-title">Consistência Visual para Marca</div><p>Para criar uma identidade visual coerente, mantenha os mesmos parâmetros base em todas as gerações: mesma paleta de cores, mesmo estilo de iluminação, mesmo tipo de composição. Salve o seed de uma imagem que representa seu estilo e use como referência. Inclua no prompt termos como "consistent with brand identity", "same visual style as previous", "luxury minimalist aesthetic with green and gold palette". Isso faz todas as imagens parecerem da mesma "sessão fotográfica".</p></div>
+    </div>
+
+    <div class="prompts-section"><div class="prompts-header"><div class="prompts-title">Prompts Prontos</div><div class="prompts-ornament"><div class="prompts-line"></div><div class="prompts-fleur">⚜</div><div class="prompts-line"></div></div><div class="prompts-subtitle">Prompts testados para resultados profissionais</div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Foto de Produto Editorial</div><div class="prompt-card-desc">Visual de revista para qualquer produto</div><div class="prompt-box"><p>Product photography of [PRODUTO] in original sealed packaging, placed on [SUPERFÍCIE - ex: dark green velvet surface], background of [FUNDO - ex: white marble wall with golden veins], soft directional lighting from the left side, shallow depth of field with subtle bokeh, luxury editorial aesthetic, shot on Sony A7IV with 90mm macro lens, 8K resolution, clean minimal composition, no text overlay, no watermark</p></div><div class="media-example"><div class="media-label">Resultado</div><img src="assets/img-produto-editorial.jpg" alt="Exemplo foto de produto"><div class="media-placeholder">Imagem: img-produto-editorial.jpg</div></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Upscaler Inteligente</div><div class="prompt-card-desc">Melhore a qualidade sem alterar o conteúdo</div><div class="prompt-box"><p>Enhance this image to high resolution while preserving every detail exactly as it is. Do not change: the person's face, facial features, skin texture, body proportions, hair, clothing, background elements, colors, or composition. Only improve: sharpness, resolution, clarity, and reduce noise/compression artifacts. The result must look like the same photo taken with a much better camera. Maintain identical lighting and color grading. Output in 8K quality.</p></div><div class="media-example"><div class="media-label">Antes e Depois</div><img src="assets/img-upscaler-exemplo.jpg" alt="Exemplo upscaler"><div class="media-placeholder">Imagem: img-upscaler-exemplo.jpg</div></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Retrato Fotorrealista</div><div class="prompt-card-desc">Pessoas que parecem reais</div><div class="prompt-box"><p>Photorealistic portrait of a [idade, gênero, etnia] person, [expressão facial], [vestimenta], natural window lighting with soft shadows, shot on Canon EOS R5 with 85mm f/1.4 lens, shallow depth of field, warm color grading, skin texture visible at pore level, editorial photography style, 8K, no makeup filter look, authentic and natural</p></div><div class="media-example"><div class="media-label">Resultado</div><img src="assets/img-retrato-exemplo.jpg" alt="Exemplo retrato"><div class="media-placeholder">Imagem: img-retrato-exemplo.jpg</div></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Cenário para Conteúdo</div><div class="prompt-card-desc">Backgrounds profissionais para stories e posts</div><div class="prompt-box"><p>Atmospheric [tipo de ambiente - ex: luxury apartment living room / coffee shop / urban rooftop], [horário - ex: golden hour / blue hour / midday], [estilo - ex: minimalist Scandinavian / industrial loft / tropical modern], volumetric light rays, cinematic color grading, shot on Arri Alexa with anamorphic lens, film grain, 16:9 aspect ratio, no people, interior design magazine quality</p></div><div class="media-example"><div class="media-label">Resultado</div><img src="assets/img-cenario-exemplo.jpg" alt="Exemplo cenário"><div class="media-placeholder">Imagem: img-cenario-exemplo.jpg</div></div></div>
+    </div>
+    <footer class="module-footer"><div class="footer-fleur">⚜</div><div class="footer-brand">Prisma <span>Mar</span>IIIn</div><div class="footer-ornament"><div class="footer-orn-line"></div><span style="color:var(--gold-dark);font-size:.6rem;opacity:.4;">⚜</span><div class="footer-orn-line"></div></div><p>Importação e Inovação com Inteligência</p><p class="copyright">Conteúdo exclusivo para clientes Prisma MarIIIn</p></footer>
+  </div>
+
+  <!-- ======================== MÓDULO VÍDEO ======================== -->
+  <div class="module-panel" id="mod-video">
+    <section class="section">
+      <div class="section-header"><div class="section-label">Módulo 03</div><h2>IAs de Vídeo</h2><div class="section-h2-ornament"><div class="section-h2-line"></div><div class="section-h2-fleur">⚜</div><div class="section-h2-line"></div></div><p class="section-intro">Crie vídeos cinematográficos a partir de texto ou imagens. O que antes exigia uma equipe de filmagem, agora se faz com um prompt.</p></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon video">▶</div><div><div class="tool-name">Kling AI <span class="badge best">Líder</span></div><div class="tool-tagline">Vídeos cinematográficos de qualidade comercial</div></div></div><div class="tool-summary"><p>O Kling produz clipes de 5 a 10 segundos com qualidade que rivaliza com produções profissionais. Movimento de câmera fluido, física realista, expressões faciais convincentes — tudo a partir de um prompt ou uma imagem.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>O grande diferencial do Kling é o <strong>modo imagem → vídeo</strong>. Gere uma imagem perfeita no Z-Image, depois use essa imagem como base no Kling para animá-la. Essa combinação produz resultados dramaticamente superiores ao modo texto → vídeo, porque você controla exatamente o visual de partida.</p><p>Outro ponto forte é o <strong>controle de câmera</strong>. O Kling interpreta termos cinematográficos com precisão profissional: "slow dolly forward" (câmera avança suavemente), "pan left to right" (rotação horizontal), "crane shot ascending" (sobe como um guindaste), "tracking shot following subject" (acompanha o sujeito em movimento), "push in" (aproximação dramática), "pull out" (afastamento revelador). Pense como um diretor de cinema ao escrever o prompt.</p><p><strong>Física e movimento:</strong> o Kling entende física básica — cabelo balançando com vento, água fluindo, roupas com movimento natural, partículas de poeira em feixes de luz. Ao descrever a cena, inclua esses detalhes: "hair gently moving with breeze", "subtle fabric movement", "dust particles floating in light beam". Esses detalhes pequenos são o que separa um vídeo de IA convincente de um que parece artificial.</p><p><strong>Duração e qualidade:</strong> vídeos podem ser de 5 ou 10 segundos. Para a maioria dos usos (stories, reels, conteúdo de marca), 5 segundos é suficiente e a qualidade tende a ser mais consistente. Use 10 segundos quando a cena precisa de um arco — por exemplo, uma câmera que revela algo gradualmente.</p><p><strong>Dicas de produção:</strong> para conteúdo mais longo, gere múltiplos clipes de 5s e junte num editor de vídeo (CapCut, InShot ou até o editor gratuito do celular). Combine com música do Suno para criar vídeos completos com trilha sonora. Este é o pipeline criativo completo da Prisma MarIIIn: imagem (Z-Image) → vídeo (Kling) → música (Suno) → edição final.</p><div class="how-to"><div class="how-to-title">Como Usar</div><div class="step"><div class="step-num">1</div><div class="step-text">Acesse <code>klingai.com</code> e crie sua conta. Créditos gratuitos disponíveis para experimentar.</div></div><div class="step"><div class="step-num">2</div><div class="step-text">Escolha o modo: <strong>texto → vídeo</strong> (descreva a cena do zero) ou <strong>imagem → vídeo</strong> (anime uma foto — recomendado). Para imagem → vídeo, faça upload da imagem e descreva apenas o movimento desejado.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">No prompt, estruture assim: [movimento de câmera] + [ação dos elementos] + [ambiente/iluminação] + [estilo visual]. Exemplo: "Slow dolly forward, product box lid opening revealing contents, soft golden light from left, luxury commercial aesthetic, 4K".</div></div><div class="step"><div class="step-num">4</div><div class="step-text">Selecione duração (5s recomendado para começar), qualidade e proporção. O processamento leva de 2 a 10 minutos dependendo da fila.</div></div><div class="step"><div class="step-num">5</div><div class="step-text">Se o resultado não ficou bom, ajuste o prompt em vez de gerar de novo com o mesmo texto. Pequenas mudanças na descrição ("mais lento", "mais close", "iluminação mais quente") podem mudar drasticamente o resultado.</div></div></div><div class="tip"><div class="tip-label">Dica Prisma</div><p>O pipeline definitivo: crie a imagem no Z-Image com o prompt gerado pelo Claude, depois anime no Kling, e adicione trilha do Suno. Você terá um conteúdo de vídeo com qualidade comercial sem câmera, estúdio, equipe ou instrumento musical. É criação de conteúdo profissional acessível para qualquer pessoa.</p></div></div></div></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon video">▷</div><div><div class="tool-name">Veo</div><div class="tool-tagline">Google DeepMind — Consistência que impressiona</div></div></div><div class="tool-summary"><p>O Veo é a resposta do Google para geração de vídeo. Sua especialidade é a consistência temporal — objetos e pessoas mantêm aparência estável ao longo do vídeo, sem as distorções que aparecem em outras ferramentas.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>O Veo se diferencia pela <strong>estabilidade visual</strong>. Onde o Kling às vezes introduz pequenas distorções em movimentos complexos, o Veo mantém uma coerência impressionante. Resolução até 4K, com resultados naturalmente cinematográficos.</p><div class="how-to"><div class="how-to-title">Como Usar</div><div class="step"><div class="step-num">1</div><div class="step-text">Acesse pelo Google AI Studio ou <code>labs.google/fx</code>.</div></div><div class="step"><div class="step-num">2</div><div class="step-text">Descreva a cena com foco em ambiente, iluminação, ação e mood.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">O Veo produz resultados cinematográficos naturalmente — menos necessidade de vocabulário técnico que o Kling.</div></div></div><div class="table-wrap"><table class="compare-table"><tr><th>Comparativo</th><th>Kling</th><th>Veo</th></tr><tr><td>Qualidade visual</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>Consistência temporal</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>Controle de câmera</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐</td></tr><tr><td>Imagem → vídeo</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr></table></div></div></div></div>
+    </section>
+
+    <div class="adv-section"><div class="adv-header"><div class="adv-title">Técnicas Avançadas</div><div class="adv-ornament"><div class="adv-line"></div><div class="adv-fleur">⚜</div><div class="adv-line"></div></div><div class="adv-subtitle">Domine a geração de vídeo</div></div>
+      <div class="adv-card"><div class="adv-card-num">01</div><div class="adv-card-title">Pipeline Z-Image → Kling</div><p>A técnica mais poderosa de geração de vídeo: crie a imagem perfeita no Z-Image primeiro, depois use como base no Kling. Você controla composição, iluminação e estilo antes de animar. O resultado é 10x melhor do que gerar vídeo do zero com texto.</p></div>
+      <div class="adv-card"><div class="adv-card-num">02</div><div class="adv-card-title">Vocabulário de Câmera</div><p>Use termos cinematográficos no prompt: "dolly forward" (câmera avança), "pan left" (gira pra esquerda), "crane shot" (sobe), "tracking shot" (acompanha), "slow zoom in" (zoom suave). O Kling interpreta esses termos com precisão profissional.</p></div>
+    </div>
+
+    <div class="prompts-section"><div class="prompts-header"><div class="prompts-title">Prompts Prontos</div><div class="prompts-ornament"><div class="prompts-line"></div><div class="prompts-fleur">⚜</div><div class="prompts-line"></div></div><div class="prompts-subtitle">Templates cinematográficos prontos</div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Comercial de Produto</div><div class="prompt-card-desc">Estilo comercial de TV</div><div class="prompt-box"><p>Slow cinematic dolly forward towards [PRODUTO] on [SUPERFÍCIE], soft golden light entering from the left side. Shallow depth of field, luxury commercial aesthetic, subtle dust particles in the light beam. Camera moves smoothly from wide to close-up of product details. 4K, 24fps film look, no camera shake.</p></div><div class="media-example"><div class="media-label">Exemplo: Comercial de Produto</div><video controls playsinline preload="metadata"><source src="assets/video-comercial-produto.mp4" type="video/mp4"></video><div class="media-placeholder">Vídeo: video-comercial-produto.mp4</div></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Vinheta de Marca</div><div class="prompt-card-desc">Intro profissional</div><div class="prompt-box"><p>Elegant camera movement revealing a [logo/texto] engraved in [material - gold, marble, dark wood], dramatic volumetric lighting with particles, cinematic shallow depth of field, luxury brand reveal aesthetic, dark moody atmosphere with golden accent lights, slow and graceful motion, 4K cinematic quality.</p></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Conteúdo Infantil</div><div class="prompt-card-desc">Vídeos criativos e educativos</div><div class="prompt-box"><p>[Descrição da cena infantil/educativa], colorful and friendly aesthetic, smooth gentle camera movement, warm lighting, safe and wholesome atmosphere, Pixar-like visual quality, suitable for children, vibrant colors, 4K quality.</p></div><div class="media-example"><div class="media-label">Exemplo: Vídeo Infantil</div><video controls playsinline preload="metadata"><source src="assets/video-infantil-ayla.mp4" type="video/mp4"></video><div class="media-placeholder">Vídeo: video-infantil-ayla.mp4</div></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Modelo de IA em Vídeo</div><div class="prompt-card-desc">Anime retratos fotorrealistas</div><div class="prompt-box"><p>[Descrição da modelo/personagem], subtle natural movement (hair blowing, slight smile, breathing), cinematic shallow depth of field, fashion editorial aesthetic, volumetric lighting, shot on Arri Alexa, 4K, photo-to-video animation, maintain facial consistency throughout.</p></div><div class="media-example"><div class="media-label">Exemplo: Modelo de IA Animada</div><video controls playsinline preload="metadata"><source src="assets/video-modelo-ia.mp4" type="video/mp4"></video><div class="media-placeholder">Vídeo: video-modelo-ia.mp4</div></div></div>
+    </div>
+    <footer class="module-footer"><div class="footer-fleur">⚜</div><div class="footer-brand">Prisma <span>Mar</span>IIIn</div><div class="footer-ornament"><div class="footer-orn-line"></div><span style="color:var(--gold-dark);font-size:.6rem;opacity:.4;">⚜</span><div class="footer-orn-line"></div></div><p>Importação e Inovação com Inteligência</p><p class="copyright">Conteúdo exclusivo para clientes Prisma MarIIIn</p></footer>
+  </div>
+
+  <!-- ======================== MÓDULO CÓDIGO ======================== -->
+  <div class="module-panel" id="mod-codigo">
+    <section class="section">
+      <div class="section-header"><div class="section-label">Módulo 04</div><h2>IAs para Código</h2><div class="section-h2-ornament"><div class="section-h2-line"></div><div class="section-h2-fleur">⚜</div><div class="section-h2-line"></div></div><p class="section-intro">Crie aplicativos, sites e automações sem saber programar. Descreva o que quer como se explicasse para um amigo — a IA constrói.</p></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon code">📝</div><div><div class="tool-name">VS Code <span class="badge free">Gratuito</span></div><div class="tool-tagline">Microsoft — O editor de código mais usado do mundo</div></div></div><div class="tool-summary"><p>O Visual Studio Code é o editor de código gratuito da Microsoft e a base sobre a qual o Cursor foi construído. Com extensões de IA como GitHub Copilot e Continue, ele se torna uma ferramenta poderosa para quem quer programar com assistência inteligente.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>O VS Code é o ponto de partida ideal para quem quer aprender a programar. Ele é <strong>completamente gratuito</strong>, tem milhares de extensões disponíveis e uma comunidade enorme. Com a extensão <strong>GitHub Copilot</strong> (incluída grátis para estudantes e projetos open source), você ganha sugestões de código em tempo real enquanto digita.</p><p>A diferença para o Cursor: no VS Code você precisa instalar extensões separadamente para ter IA, enquanto no Cursor a IA já vem integrada nativamente com uma experiência mais fluida. Pense no VS Code como a versão "monte você mesmo" e o Cursor como a versão "tudo pronto".</p><div class="how-to"><div class="how-to-title">Como Começar</div><div class="step"><div class="step-num">1</div><div class="step-text">Baixe em <code>code.visualstudio.com</code> (Windows, Mac, Linux). Totalmente gratuito.</div></div><div class="step"><div class="step-num">2</div><div class="step-text">Instale a extensão "GitHub Copilot" para ter sugestões de código por IA.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">Para uma experiência mais parecida com o Cursor, instale a extensão "Continue" — ela adiciona um chat de IA lateral onde você descreve o que quer.</div></div></div></div></div></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon code">⌘</div><div><div class="tool-name">Cursor <span class="badge best">Melhor</span></div><div class="tool-tagline">Vibe coding — programe pela intenção</div></div></div><div class="tool-summary"><p>O Cursor democratizou a programação. Mesmo sem conhecimento técnico, você descreve o que quer em português e a IA escreve código funcional. Isso se chama "vibe coding" — programar pela vibe, pela intenção.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>O Cursor é baseado no VS Code (o editor mais popular do mundo) com IA integrada diretamente no fluxo de trabalho. Pressione <code>Ctrl+L</code>, descreva o que quer, e a IA gera o código completo. Clique "Apply" e veja o resultado. Se não gostou, diga o que quer mudar em linguagem natural.</p><p>Isso significa que <strong>qualquer pessoa</strong> pode criar um site, um app, uma automação — basta saber descrever o que quer. A barreira técnica praticamente desapareceu.</p><div class="how-to"><div class="how-to-title">Como Começar</div><div class="step"><div class="step-num">1</div><div class="step-text">Baixe em <code>cursor.com</code> (Windows, Mac, Linux).</div></div><div class="step"><div class="step-num">2</div><div class="step-text">Abra e pressione <code>Ctrl+L</code> para o chat de IA.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">Descreva: "crie uma landing page para venda de eletrônicos com design luxuoso".</div></div><div class="step"><div class="step-num">4</div><div class="step-text">Clique "Apply", visualize, e peça ajustes conversando.</div></div></div></div></div></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon code">⟩_</div><div><div class="tool-name">Claude Code</div><div class="tool-tagline">Programador autônomo no terminal</div></div></div><div class="tool-summary"><p>O Claude Code transforma o Claude em um programador autônomo que lê seu projeto, entende a estrutura, cria arquivos, testa e corrige — tudo sozinho a partir de instruções em linguagem natural.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>Enquanto o Cursor é visual e interativo, o Claude Code é <strong>agêntico</strong> — ele age de forma independente. Você dá a missão e ele executa: navega pelos arquivos, entende o contexto, implementa, testa e pede aprovação. Ideal para projetos maiores e mais complexos.</p><div class="how-to"><div class="how-to-title">Como Começar</div><div class="step"><div class="step-num">1</div><div class="step-text">Instale: <code>npm install -g @anthropic-ai/claude-code</code></div></div><div class="step"><div class="step-num">2</div><div class="step-text">Na pasta do projeto, execute <code>claude</code>.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">Descreva: "corrija o bug de login" ou "adicione sistema de pagamento".</div></div></div><div class="table-wrap"><table class="compare-table"><tr><th>Comparativo</th><th>Cursor</th><th>Claude Code</th></tr><tr><td>Ideal para</td><td>Interface visual, iniciantes</td><td>Projetos complexos, terminal</td></tr><tr><td>Nível necessário</td><td>Iniciante</td><td>Intermediário</td></tr><tr><td>Autonomia</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr></table></div></div></div></div>
+    </section>
+
+    <div class="prompts-section"><div class="prompts-header"><div class="prompts-title">Prompts Prontos</div><div class="prompts-ornament"><div class="prompts-line"></div><div class="prompts-fleur">⚜</div><div class="prompts-line"></div></div><div class="prompts-subtitle">Do conceito ao deploy</div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Landing Page de Vendas</div><div class="prompt-card-desc">Site completo em minutos</div><div class="prompt-box"><p>Crie uma landing page moderna e responsiva para uma loja de eletrônicos chamada [NOME]. Inclua: hero section com nome e slogan, seção de produtos em destaque com cards (foto/nome/preço), seção de diferenciais (entrega no dia, lacrado, garantia), e footer com link direto pro WhatsApp. Paleta: verde escuro (#1a3a2a), dourado (#c9a84c), creme (#f5f0e8). Fonte elegante serifada nos títulos. Design que transmita confiança e sofisticação.</p></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Automação WhatsApp</div><div class="prompt-card-desc">Scripts para otimizar vendas</div><div class="prompt-box"><p>Crie um script em Python que gere automaticamente mensagens personalizadas para uma lista de clientes no formato CSV (nome, produto_comprado, data_compra). A mensagem deve: cumprimentar pelo nome, perguntar se está satisfeito com o [produto], e oferecer novos produtos com link. Gere variações da mensagem para não parecer robótica. Exporte as mensagens prontas para copiar e colar no WhatsApp.</p></div></div>
+    </div>
+    <footer class="module-footer"><div class="footer-fleur">⚜</div><div class="footer-brand">Prisma <span>Mar</span>IIIn</div><div class="footer-ornament"><div class="footer-orn-line"></div><span style="color:var(--gold-dark);font-size:.6rem;opacity:.4;">⚜</span><div class="footer-orn-line"></div></div><p>Importação e Inovação com Inteligência</p><p class="copyright">Conteúdo exclusivo para clientes Prisma MarIIIn</p></footer>
+  </div>
+
+  <!-- ======================== MÓDULO MÚSICA ======================== -->
+  <div class="module-panel" id="mod-musica">
+    <section class="section">
+      <div class="section-header"><div class="section-label">Módulo 05</div><h2>IAs de Música</h2><div class="section-h2-ornament"><div class="section-h2-line"></div><div class="section-h2-fleur">⚜</div><div class="section-h2-line"></div></div><p class="section-intro">Crie músicas originais completas — vocais, instrumentação e masterização — a partir de uma descrição em texto. Trilhas sonoras, jingles, conteúdo musical. Sem saber tocar uma nota.</p></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon music">♫</div><div><div class="tool-name">Suno <span class="badge best">Líder</span></div><div class="tool-tagline">Músicas completas com vocais em minutos</div></div></div><div class="tool-summary"><p>O Suno é a IA de música mais impressionante disponível. Ele gera músicas completas — com vocais realistas, instrumentação variada e masterização profissional — a partir de uma simples descrição em texto. O resultado é tão bom que muitas músicas geradas são indistinguíveis de produções humanas.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>O Suno não é apenas um gerador de batidas — ele cria <strong>músicas completas</strong> com estrutura de intro, verso, refrão, bridge e outro. Os vocais soam naturais, a instrumentação é rica e variada, e a masterização já vem pronta para publicação. A evolução nos últimos meses foi impressionante — versões recentes produzem vocais que enganam ouvidos treinados.</p><p>A combinação mais poderosa: <strong>Suno + Kling</strong>. Crie a música no Suno, gere o visual no Z-Image, anime no Kling, e monte um videoclipe completo. Um pipeline criativo inteiro sem câmera, estúdio ou instrumento musical.</p><p><strong>Modo Simples vs Custom:</strong> no modo simples, você descreve o que quer em uma frase e o Suno gera tudo — letra, melodia, arranjo. É rápido mas você tem menos controle. No modo Custom, você define título, letra completa, gênero, mood e tags de estilo. O modo Custom produz resultados muito superiores quando você sabe o que quer.</p><p><strong>A técnica da letra pré-escrita:</strong> em vez de deixar o Suno gerar a letra automaticamente, use o Claude para escrevê-la antes. Peça ao Claude uma letra com marcações de estrutura que o Suno interpreta: [Intro], [Verse], [Pre-Chorus], [Chorus], [Bridge], [Outro], [Instrumental Break]. O Claude entende métricas musicais — ele sabe quantas sílabas cabem em uma linha de 120 BPM e ajusta naturalmente.</p><p><strong>Tags de estilo que fazem diferença:</strong> no campo de estilo do Suno, seja específico. Em vez de "pop", use "indie pop, dreamy vocals, reverb, lo-fi production, bedroom pop aesthetic". Em vez de "triste", use "melancholic ballad, minor key, piano-driven, intimate vocal, 72 BPM, string arrangement". Quanto mais tags técnicas, mais o Suno se aproxima do que você imaginou.</p><p><strong>Para que serve na prática:</strong> trilhas sonoras para vídeos de produto, jingles para marca, conteúdo musical para reels e TikTok, músicas infantis personalizadas, background music para podcasts e apresentações, tracks para conteúdo educativo, músicas para eventos e celebrações.</p><div class="how-to"><div class="how-to-title">Como Usar</div><div class="step"><div class="step-num">1</div><div class="step-text">Acesse <code>suno.com</code> e crie uma conta. Créditos gratuitos disponíveis para experimentar — suficientes para gerar cerca de 10 músicas.</div></div><div class="step"><div class="step-num">2</div><div class="step-text">No modo simples, descreva o estilo: "música pop brasileira animada sobre recomeço". O Suno gera letra e música automaticamente em segundos.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">No modo Custom (recomendado), preencha: título, cole a letra com marcações de estrutura ([Verse], [Chorus], etc.), e adicione tags de estilo específicas no campo de gênero.</div></div><div class="step"><div class="step-num">4</div><div class="step-text">Use o Claude primeiro para gerar a letra. Peça ao Claude: "escreva uma letra de [gênero] sobre [tema] com marcações de estrutura para o Suno". O resultado será uma letra com rimas consistentes, métricas corretas e estrutura profissional.</div></div><div class="step"><div class="step-num">5</div><div class="step-text">O Suno gera 2 variações por vez. Ouça ambas, escolha a melhor, e use o recurso "Extend" para adicionar mais seções se precisar de uma música mais longa.</div></div></div><div class="tip"><div class="tip-label">Dica Prisma</div><p>Especifique BPM, tom e instrumentação para controle fino. "Balada em Am, 72 BPM, piano e violoncelo, estilo Ludovico Einaudi, intimate vocal, minimal production" gera um resultado completamente diferente de "música triste". A linguagem técnica é o que separa uma geração genérica de uma produção que soa profissional. E lembre-se: músicas bilíngues (português + inglês) funcionam surpreendentemente bem no Suno.</p></div></div></div></div>
+
+      <div class="tool-card" onclick="this.classList.toggle('expanded')"><span class="corner-tl">⚜</span><span class="corner-br">⚜</span><div class="tool-header"><div class="tool-icon music">🎵</div><div><div class="tool-name">Udio</div><div class="tool-tagline">A alternativa que brilha em gêneros musicais variados</div></div></div><div class="tool-summary"><p>O Udio é o principal concorrente do Suno e se destaca pela fidelidade a gêneros musicais específicos. Se você precisa de um samba autêntico, um jazz sofisticado ou um rock clássico, o Udio tende a capturar melhor as nuances de cada estilo.</p></div><div class="toggle-hint"><span>Toque para ler mais</span><span class="arrow">▼</span></div><div class="tool-full"><div class="tool-body"><p>Enquanto o Suno é mais forte em produção pop e vocais realistas, o Udio se diferencia pela <strong>autenticidade de gênero</strong>. Ele reproduz com mais fidelidade as características que definem cada estilo musical — o swing do jazz, a batida do funk brasileiro, o timbre do rock anos 70.</p><p>Outro diferencial: o Udio permite <strong>estender músicas</strong> adicionando seções (intro, outro, bridge) a uma geração existente, dando mais controle sobre a estrutura final.</p><div class="how-to"><div class="how-to-title">Como Usar</div><div class="step"><div class="step-num">1</div><div class="step-text">Acesse <code>udio.com</code> e crie uma conta. Créditos gratuitos para começar.</div></div><div class="step"><div class="step-num">2</div><div class="step-text">Descreva o estilo, mood e instrumentação desejados. Quanto mais específico o gênero, melhor o Udio performa.</div></div><div class="step"><div class="step-num">3</div><div class="step-text">Use o recurso de extensão para adicionar intro, bridge ou outro a uma música que já ficou boa.</div></div></div><div class="table-wrap"><table class="compare-table"><tr><th>Comparativo</th><th>Suno</th><th>Udio</th></tr><tr><td>Vocais realistas</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr><tr><td>Fidelidade de gênero</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>Produção pop</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td></tr><tr><td>Extensão de músicas</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>Plano gratuito</td><td>Créditos limitados</td><td>Créditos limitados</td></tr></table></div></div></div></div>
+    </section>
+
+    <div class="adv-section"><div class="adv-header"><div class="adv-title">Técnicas Avançadas</div><div class="adv-ornament"><div class="adv-line"></div><div class="adv-fleur">⚜</div><div class="adv-line"></div></div><div class="adv-subtitle">Eleve suas produções musicais</div></div>
+      <div class="adv-card"><div class="adv-card-num">01</div><div class="adv-card-title">Claude Como Letrista</div><p>Use o Claude para escrever letras antes de colocar no Suno. O Claude entende estrutura musical e pode criar letras com rimas sofisticadas, métricas consistentes e marcações de estrutura ([Verso], [Refrão], [Bridge]) que o Suno interpreta perfeitamente. O resultado é vastamente superior a deixar o Suno gerar a letra sozinho.</p></div>
+      <div class="adv-card"><div class="adv-card-num">02</div><div class="adv-card-title">Especificações Técnicas</div><p>Quanto mais técnico seu prompt, melhor o resultado. Inclua: BPM (velocidade), tom (Am, C, F#m), instrumentação específica (piano acústico, guitarra flamenca, sintetizador analógico), referências de artistas ("no estilo de Billie Eilish" ou "inspirado em bossa nova de Tom Jobim"), e estrutura desejada (intro 8 compassos, verso, pré-refrão, refrão).</p></div>
+      <div class="adv-card"><div class="adv-card-num">03</div><div class="adv-card-title">Pipeline Completo: Música + Vídeo</div><p>O workflow definitivo: 1) Claude escreve a letra com estrutura marcada, 2) Suno gera a música no modo Custom, 3) Z-Image cria frames visuais que representam cada parte da música (verso = cenário A, refrão = cenário B), 4) Kling anima os frames em clipes de 5-10s sincronizados com o ritmo, 5) Junte tudo num editor de vídeo (CapCut é gratuito e excelente). Resultado: videoclipe completo criado inteiramente por IA. Esse é o pipeline que usamos na Prisma MarIIIn.</p></div>
+      <div class="adv-card"><div class="adv-card-num">04</div><div class="adv-card-title">Músicas Bilíngues</div><p>O Suno lida surpreendentemente bem com músicas que misturam português e inglês. Versos em português com refrão em inglês, ou vice-versa, criam um efeito sofisticado que soa moderno e profissional. Na hora de escrever a letra no Claude, especifique: "verso em português brasileiro coloquial, refrão em inglês, mantendo a métrica consistente entre os idiomas".</p></div>
+      <div class="adv-card"><div class="adv-card-num">05</div><div class="adv-card-title">Extensão e Edição</div><p>Se uma música ficou boa mas curta demais, use o recurso de extensão (Extend) para adicionar seções. Você pode especificar o que a nova seção deve ser: "[Bridge] com mudança de tom e instrumentação reduzida" ou "[Outro] com fade out gradual". Isso permite construir músicas longas de forma modular, aproveitando as melhores partes de cada geração.</p></div>
+    </div>
+
+    <div class="prompts-section"><div class="prompts-header"><div class="prompts-title">Prompts Prontos</div><div class="prompts-ornament"><div class="prompts-line"></div><div class="prompts-fleur">⚜</div><div class="prompts-line"></div></div><div class="prompts-subtitle">Templates para criação musical</div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Jingle para Marca</div><div class="prompt-card-desc">Música de identidade comercial</div><div class="prompt-box"><p>Upbeat commercial jingle, 120 BPM, key of C major, bright and memorable melody, claps and snaps, positive energy, catchy hook that sticks in your head, professional mixing, 30 seconds duration, suitable for social media ads and brand content, modern pop production</p></div><div class="media-example"><div class="media-label">Exemplo: Jingle</div><audio controls preload="metadata"><source src="assets/musica-jingle-exemplo.mp3" type="audio/mpeg"></audio><div class="media-placeholder">Áudio: musica-jingle-exemplo.mp3</div></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Trilha para Vídeo</div><div class="prompt-card-desc">Background music cinematográfico</div><div class="prompt-box"><p>Cinematic instrumental background music, 90 BPM, key of Dm, emotional and inspiring, strings section with subtle piano, building crescendo, no vocals, film score aesthetic, Hans Zimmer inspired, suitable for brand video or documentary, professional mastering, 2 minutes duration</p></div><div class="media-example"><div class="media-label">Exemplo: Trilha Cinematográfica</div><audio controls preload="metadata"><source src="assets/musica-trilha-exemplo.mp3" type="audio/mpeg"></audio><div class="media-placeholder">Áudio: musica-trilha-exemplo.mp3</div></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Música Infantil</div><div class="prompt-card-desc">Canções educativas e divertidas</div><div class="prompt-box"><p>Children's educational song in Brazilian Portuguese, happy and playful melody, 110 BPM, key of G major, gentle female vocals, acoustic guitar and ukulele, tambourine, simple and catchy lyrics about [tema], suitable for ages 0-5, professional production, warm and loving tone</p></div><div class="media-example"><div class="media-label">Exemplo: Música Infantil</div><audio controls preload="metadata"><source src="assets/musica-infantil-exemplo.mp3" type="audio/mpeg"></audio><div class="media-placeholder">Áudio: musica-infantil-exemplo.mp3</div></div></div>
+      <div class="prompt-card"><div class="prompt-card-title">⚜ Pedir Letra ao Claude</div><div class="prompt-card-desc">Use antes de colocar no Suno</div><div class="prompt-box"><p>Escreva a letra de uma música no estilo [gênero]. O tema é [tema/história]. A música deve ter a seguinte estrutura: [Intro instrumental], [Verso 1] (4 linhas), [Pré-Refrão] (2 linhas), [Refrão] (4 linhas marcantes e memoráveis), [Verso 2] (4 linhas), [Refrão], [Bridge] (4 linhas com mudança emocional), [Refrão final], [Outro]. Use rimas alternadas nos versos e rimas emparelhadas no refrão. Tom emocional: [alegre/melancólico/motivacional/romântico]. Idioma: [português/inglês].</p></div></div>
+    </div>
+    <footer class="module-footer"><div class="footer-fleur">⚜</div><div class="footer-brand">Prisma <span>Mar</span>IIIn</div><div class="footer-ornament"><div class="footer-orn-line"></div><span style="color:var(--gold-dark);font-size:.6rem;opacity:.4;">⚜</span><div class="footer-orn-line"></div></div><p>Importação e Inovação com Inteligência</p><p class="copyright">Conteúdo exclusivo para clientes Prisma MarIIIn</p></footer>
+  </div>
+
+</div>
+
+<script>
+const VALID_CODES=['PRISMA-MARIN','PRISMA-0001','PRISMA-0002'];
+const gate=document.getElementById('access-gate'),mainContent=document.getElementById('main-content'),videoIntro=document.getElementById('video-intro'),introVideo=document.getElementById('intro-video'),codeInput=document.getElementById('access-code'),accessBtn=document.getElementById('access-btn'),errorMsg=document.getElementById('gate-error');
+if(localStorage.getItem('prisma-auth')==='true'){gate.style.display='none';mainContent.style.display='block';mainContent.style.opacity='1';}
+function attemptAccess(){const code=codeInput.value.trim().toUpperCase();if(VALID_CODES.includes(code)){localStorage.setItem('prisma-auth','true');errorMsg.classList.remove('show');gate.classList.add('hidden');setTimeout(()=>{gate.style.display='none';videoIntro.classList.add('active');introVideo.play().catch(()=>showMainContent());introVideo.addEventListener('ended',showMainContent);setTimeout(()=>{if(videoIntro.classList.contains('active'))showMainContent();},15000);},800);}else{errorMsg.classList.add('show');codeInput.style.borderColor='#e07a5f';setTimeout(()=>{codeInput.style.borderColor='rgba(201,168,76,.25)';},2000);}}
+function showMainContent(){videoIntro.classList.remove('active');mainContent.style.display='block';requestAnimationFrame(()=>{mainContent.classList.add('visible');});}
+function skipVideo(){if(videoIntro.classList.contains('active')){introVideo.pause();showMainContent();}}
+document.addEventListener('keydown',skipVideo);videoIntro.addEventListener('click',skipVideo);videoIntro.addEventListener('touchstart',skipVideo);
+accessBtn.addEventListener('click',attemptAccess);codeInput.addEventListener('keypress',(e)=>{if(e.key==='Enter')attemptAccess();});
+
+// TAB SYSTEM
+document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',()=>{const target=btn.dataset.tab;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.module-panel').forEach(m=>m.classList.remove('active'));document.getElementById('mod-'+target).classList.add('active');window.scrollTo({top:document.querySelector('.tab-bar').offsetTop,behavior:'smooth'});});});
+
+// Prevent card toggle when clicking inside prompt boxes (for text selection)
+document.querySelectorAll('.prompt-box, .how-to, .table-wrap, .tip').forEach(el=>{el.addEventListener('click',(e)=>{e.stopPropagation();});});
+
+// DARK MODE TOGGLE
+const themeToggle = document.getElementById('theme-toggle');
+const curtainDark = document.getElementById('curtain-dark');
+const curtainLight = document.getElementById('curtain-light');
+const shimmerOverlay = document.getElementById('shimmer-overlay');
+
+if (localStorage.getItem('prisma-dark') === 'true') {
+  document.body.classList.add('dark-mode');
+}
+
+let transitioning = false;
+
+themeToggle.addEventListener('click', () => {
+  if (transitioning) return;
+  transitioning = true;
+  
+  const isDark = document.body.classList.contains('dark-mode');
+  const curtain = isDark ? curtainLight : curtainDark;
+  
+  curtain.classList.remove('enter', 'exit');
+  shimmerOverlay.classList.remove('active');
+  void curtain.offsetWidth;
+  
+  curtain.classList.add('enter');
+  
+  setTimeout(() => {
+    if (!isDark) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('prisma-dark', 'true');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('prisma-dark', 'false');
+    }
+    
+    curtain.classList.remove('enter');
+    void curtain.offsetWidth;
+    curtain.classList.add('exit');
+    setTimeout(() => { shimmerOverlay.classList.add('active'); }, 100);
+  }, 400);
+  
+  setTimeout(() => {
+    curtain.classList.remove('exit');
+    shimmerOverlay.classList.remove('active');
+    transitioning = false;
+  }, 1100);
+});
+// COPY PROMPT TO CLIPBOARD
+const copyToast = document.getElementById('copy-toast');
+let toastTimeout;
+
+document.querySelectorAll('.prompt-box').forEach(box => {
+  box.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const text = box.querySelector('p').textContent;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      box.classList.add('copied');
+      setTimeout(() => box.classList.remove('copied'), 2000);
+      
+      clearTimeout(toastTimeout);
+      copyToast.classList.add('show');
+      toastTimeout = setTimeout(() => copyToast.classList.remove('show'), 1800);
+    }).catch(() => {
+      // Fallback for older browsers
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      
+      box.classList.add('copied');
+      setTimeout(() => box.classList.remove('copied'), 2000);
+      clearTimeout(toastTimeout);
+      copyToast.classList.add('show');
+      toastTimeout = setTimeout(() => copyToast.classList.remove('show'), 1800);
+    });
+  });
+});
+</script>
+</body>
+</html>
