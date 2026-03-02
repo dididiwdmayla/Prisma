@@ -1128,7 +1128,7 @@ body.dark-mode body::before { opacity: 0.3; }
 
 <script>
 const SALT='PRISMA-MARIIIN-2026-GUIA-IA';
-const VALID_HASHES=['fb2196eb1fc84396676a3a0db61b2b843a4ee26ef7c3bdf2457481f82c6b67b5','7367128698a94c5ac4b452a5da624731963af27ceec1d3c862140df8ad4cf872','21b5801e76d02c9f759246b9b1fca55803f62527753bd8c194c991df283098a1'];
+const VALID_HASHES=['1af0bb2da8c7d6ed48878d5d5e465bcef28e15cd39353081906fe5d4b820817e'];
 async function hashCode(code){const enc=new TextEncoder();const data=enc.encode(SALT+code.toUpperCase());const buf=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
 const gate=document.getElementById('access-gate'),mainContent=document.getElementById('main-content'),videoIntro=document.getElementById('video-intro'),introVideo=document.getElementById('intro-video'),codeInput=document.getElementById('access-code'),accessBtn=document.getElementById('access-btn'),errorMsg=document.getElementById('gate-error');
 if(localStorage.getItem('prisma-auth')==='true'){gate.style.display='none';mainContent.style.display='block';mainContent.style.opacity='1';}
